@@ -128,3 +128,14 @@
 .gui-screen .intake .ghost-chip{color:var(--g-ink);background:#fffdf4;border:1px dashed #6b6f60;font-size:15px;opacity:1}
 .gui-screen .intake .ghost-chip.on{background:var(--g-ink);color:var(--g-cream);border-style:solid}
 .gui-screen .intake .q-card small,.gui-screen .intake .q-card .q-help{color:#4a4f43}
+
+/* Phiếu khách theo từng bước */
+.intake.wizard .chapter-stage{min-height:170px;padding:28px 34px}
+.intake.wizard .chapter-meta{margin-top:8px}
+.wizard-nav{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:28px 0 8px;padding-top:18px;border-top:1px solid var(--b-line,#e5dfd6)}
+.wizard-nav button{font:inherit;font-weight:600;border-radius:999px;padding:12px 22px;cursor:pointer;border:1px solid var(--b-line,#e5dfd6);background:var(--b-surface,#fff);color:var(--b-ink,#17181c)}
+.wizard-nav .wizard-next{background:var(--b-primary,#e4572e);color:var(--b-primary-ink,#fff);border-color:transparent}
+.wizard-nav button:disabled{opacity:.4;cursor:default}
+.wizard-count{font-size:.9rem;color:var(--b-muted,#6b6e78)}
+.client-link{display:block;margin:14px 0 4px;font-size:.95rem;font-weight:600;color:#fff8e9;text-decoration:underline;text-underline-offset:3px}
+.cinema-client{margin-right:14px;font-size:.95rem;font-weight:600;color:#fff8e9;text-decoration:underline;text-underline-offset:3px;white-space:nowrap}

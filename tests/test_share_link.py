@@ -64,6 +64,7 @@ def test_client_answers_whole_form_on_web(api, app):
     qs = anon.get(f"/api/v1/public/{token}/questions").json()
     codes = {q["code"] for q in qs["questions"]}
     assert "E1" not in codes and "P1" in codes and all(s["id"] != "E" for s in qs["sections"])
+    assert len(codes) <= 20 and qs["questions"][-1]["code"] == "P1" and qs["questions"][0]["code"] == "P3"
     assert anon.put(f"/api/v1/public/{token}/answers/E1", json={"expected_revision": 1, "value": {"x": 1}}).status_code == 403
     early = anon.post(f"/api/v1/public/{token}/submit")
     assert early.status_code == 422 and early.json()["error"]["code"] == "INCOMPLETE"
@@ -97,12 +98,12 @@ def test_uploading_to_text_question_counts_as_answer(api, app):
     token = api.post(f"/projects/{project['id']}/share-link", json={}).json()["token"]
     anon = _public(app)
     qs = anon.get(f"/api/v1/public/{token}/questions").json()["questions"]
-    b41 = next(q for q in qs if q["code"] == "B4.1")
-    assert "tab Tài liệu" not in b41["fields"][0]["example"]
-    view = anon.post(f"/api/v1/public/{token}/files", data={"question_code": "B4.1"}, files={"file": ("video-cu.mp4", b"\x00\x00\x00\x18ftypmp42" + b"0" * 64, "video/mp4")})
+    b41 = next(q for q in qs if q["code"] == "C2.1")
+    assert "tab Tài liệu" not in (b41["fields"][0].get("example") or "")
+    view = anon.post(f"/api/v1/public/{token}/files", data={"question_code": "C2.1"}, files={"file": ("video-cu.mp4", b"\x00\x00\x00\x18ftypmp42" + b"0" * 64, "video/mp4")})
     assert view.status_code == 201, view.text
-    answer = next(a for a in view.json()["answers"] if a["question_code"] == "B4.1")
-    assert answer["value"]["link"] == "Đã gửi tệp: video-cu.mp4"
+    answer = next(a for a in view.json()["answers"] if a["question_code"] == "C2.1")
+    assert answer["value"]["v"] == "Đã gửi tệp: video-cu.mp4"
 
 
 def test_client_starts_alone_and_staff_sees_it(api, app):

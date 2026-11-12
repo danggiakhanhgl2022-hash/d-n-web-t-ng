@@ -233,14 +233,14 @@ export default function Intake({project, setProject, questions, sections, api, e
     const groups: string[] = validation.active_groups || [];
     if (prevGroups.current) {
       const added = groups.filter(g => !prevGroups.current!.includes(g) && /^[BC]/.test(g));
-      if (added.length) {
+      if (added.length && !client) {
         setFresh(f => [...f, ...added]);
         setToasts(t => [...t, ...added.map((g, i) => ({id: Date.now() + i, text: `Đã mở nhánh ${g} · ${sections.find(s => s.id === g)?.title || ""}`}))]);
         setTimeout(() => setFresh(f => f.filter(g => !added.includes(g))), 6000);
       }
     }
     prevGroups.current = groups;
-  }, [validation.active_groups, sections]);
+  }, [validation.active_groups, sections, client]);
   useEffect(() => {
     if (!toasts.length) return;
     const timer = setTimeout(() => setToasts(t => t.slice(1)), 4200);
@@ -325,7 +325,26 @@ export default function Intake({project, setProject, questions, sections, api, e
   const reqAnswered = [...required].filter(c => answers[c] && answers[c].value != null).length;
   const reqConfirmed = [...required].filter(c => answers[c]?.status === "CONFIRMED").length;
   const parts = visible.reduce<Record<string, SectionDef[]>>((acc, s) => {(acc[s.part] = acc[s.part] || []).push(s); return acc;}, {});
-  const go = (id: string) => {setActive(id); document.getElementById(`ch-${id}`)?.scrollIntoView({behavior: "smooth", block: "start"});};
+  const go = (id: string) => {
+    setActive(id);
+    if (client) {document.getElementById("intake-top")?.scrollIntoView({behavior: "smooth", block: "start"}); return;}
+    document.getElementById(`ch-${id}`)?.scrollIntoView({behavior: "smooth", block: "start"});
+  };
+  const stepIndex = current ? visible.findIndex(v => v.id === current.id) : 0;
+  const isLastStep = stepIndex >= visible.length - 1;
+  // Khách bấm vào câu còn thiếu ở màn cuối: nhảy về đúng bước rồi cuộn tới câu đó.
+  useEffect(() => {
+    if (!client) return;
+    const onJump = (e: Event) => {
+      const code = (e as CustomEvent<string>).detail;
+      const sec = questions.find(q => q.code === code)?.section;
+      if (!sec) return;
+      setActive(sec);
+      setTimeout(() => document.querySelector(`[data-question-code="${code}"]`)?.scrollIntoView({behavior: "smooth", block: "center"}), 120);
+    };
+    window.addEventListener("gui-jump", onJump);
+    return () => window.removeEventListener("gui-jump", onJump);
+  }, [client, questions]);
   const issuesFor = (code: string) => blockers.filter(b => b.question_code === code && !["ANSWER_REQUIRED", "NEEDS_CONFIRMATION", "NEEDS_CONSULTATION"].includes(b.code)).map(b => b.message);
   const notesFor = (code: string) => notesAll.filter(b => b.question_code === code).map(b => b.message);
   const confirmableIn = (list: QDef[]) => list.filter(q => answers[q.code] && ["ANSWERED_UNCONFIRMED", "PROPOSED_FROM_SOURCE"].includes(answers[q.code].status) && !dirty[q.code] && !issuesFor(q.code).length).map(q => q.code);
@@ -334,7 +353,7 @@ export default function Intake({project, setProject, questions, sections, api, e
   const card = (q: QDef, i: number) => <QuestionCard key={q.code} q={q} index={i} answer={answers[q.code]} draft={drafts[q.code]} dirty={!!dirty[q.code]} saveState={saveState[q.code]} required={required.has(q.code)} issues={issuesFor(q.code)} notes={notesFor(q.code)} editable={editable} reviewer={reviewer} client={client} attach={attach ? attach(q.code) : undefined}
     onChange={v => change(q.code, v)} onStatus={(status, v) => change(q.code, v, status, 0)} onConfirm={() => confirm([q.code])} />;
 
-  return <div className="intake" style={themeVars} id="intake-top">
+  return <div className={`intake${client ? " wizard" : ""}`} style={themeVars} id="intake-top">
     <section className="intake-hero">
       <div className="scene" aria-hidden="true"><span className="orb o1" /><span className="orb o2" /><span className="orb o3" /><span className="grain" /></div>
       <div className="hero-copy">
@@ -382,6 +401,7 @@ export default function Intake({project, setProject, questions, sections, api, e
 
       <div className="chapters">
         {visible.map((sec, idx) => {
+          if (client && sec.id !== current?.id) return null;
           const qs = questions.filter(q => q.section === sec.id);
           const mainQs = qs.filter(q => required.has(q.code) || q.group !== "A");
           const laterQs = qs.filter(q => !required.has(q.code) && q.group === "A");
@@ -410,10 +430,15 @@ export default function Intake({project, setProject, questions, sections, api, e
                 <button type="button" className="later-toggle" aria-expanded={laterOpen[sec.id] !== false} onClick={() => setLaterOpen(o => ({...o, [sec.id]: o[sec.id] === false}))}><span>{laterOpen[sec.id] !== false ? "−" : "+"}</span>Có thể bổ sung sau · {laterQs.length} câu</button>
                 <Reveal open={laterOpen[sec.id] !== false}><div className="cards">{laterQs.map(card)}</div></Reveal>
               </div>}
+              {client && <div className="wizard-nav">
+                <button type="button" className="wizard-back" disabled={idx === 0} onClick={() => go(visible[idx - 1].id)}>← Quay lại</button>
+                <span className="wizard-count">Bước {idx + 1} / {visible.length}</span>
+                {!isLastStep && <button type="button" className="wizard-next" onClick={() => go(visible[idx + 1].id)}>Tiếp tục →</button>}
+              </div>}
             </div>
           </section>;
         })}
-        {client ? (finale || null) : <div className="finale">
+        {client ? (isLastStep ? (finale || null) : null) : <div className="finale">
           <span className="eyebrow">Hết phiếu</span>
           <h2>Kiểm tra và gửi duyệt</h2>
           <p>{blockers.length ? `Còn ${blockers.length} việc cần xử lý trước khi gửi.` : "Không còn việc chặn. Có thể gửi duyệt."}</p>

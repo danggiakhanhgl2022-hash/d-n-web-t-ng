@@ -669,7 +669,30 @@ def create_app(database_url=None, storage_dir=None):
     def public_info(token: str, db=Depends(db_session)):
         return public_view(db, link_for(db, token))
 
-    CLIENT_CODES = {q["code"] for q in QUESTIONS if q.get("audience") != "internal"}
+    # Phiếu khách gọn: tập trung video giới thiệu sản phẩm và quảng cáo mạng xã hội, chia thành từng bước.
+    # Thứ tự: mục đích và loại video trước, "đã từng làm video chưa" để cuối. Nhân viên vẫn thấy đủ bộ câu hỏi.
+    CLIENT_STEPS = [
+        {"id": "S1", "title": "Bạn cần video gì", "subtitle": "Loại video, mục đích và người xem", "part": "Phần A", "codes": ["P3", "A3", "A4"]},
+        {"id": "S2", "title": "Nội dung chính", "subtitle": "Điều quan trọng nhất và cảm giác mong muốn", "part": "Phần A", "codes": ["A5", "C2.1", "A11"]},
+        {"id": "S3", "title": "Hình thức video", "subtitle": "Số lượng, khung hình, nơi đăng, giọng đọc", "part": "Phần A", "codes": ["A7", "A8", "A9", "A10", "C7.1"]},
+        {"id": "S4", "title": "Bạn đã có gì", "subtitle": "Tư liệu, điều cần tránh, quyền dùng AI", "part": "Phần B", "codes": ["P2", "A12", "A13", "A17"]},
+        {"id": "S5", "title": "Thời gian và chi phí", "subtitle": "Khi nào cần và ngân sách dự kiến", "part": "Phần B", "codes": ["P4", "A15"]},
+        {"id": "S6", "title": "Cách liên hệ", "subtitle": "Để studio gửi báo giá cho bạn", "part": "Phần B", "codes": ["A1", "A2"]},
+        {"id": "S7", "title": "Một câu cuối", "subtitle": "Giúp studio chọn cách trao đổi phù hợp", "part": "Phần B", "codes": ["P1"]},
+    ]
+    STEP_OF = {c: st["id"] for st in CLIENT_STEPS for c in st["codes"]}
+    CLIENT_ORDER = [c for st in CLIENT_STEPS for c in st["codes"]]
+    CLIENT_CODES = {q["code"] for q in QUESTIONS if q["code"] in STEP_OF and q.get("audience") != "internal"}
+
+    def client_sections(applicable, required, answers):
+        app, req = set(applicable), set(required)
+        done = {a["question_code"] for a in answers if a.get("value") is not None}
+        out = []
+        for st in CLIENT_STEPS:
+            codes = [c for c in st["codes"] if c in app]
+            out.append({"id": st["id"], "applicable": bool(codes), "total": len(codes), "required": sum(1 for c in codes if c in req),
+                        "answered": sum(1 for c in codes if c in done), "confirmed": sum(1 for c in codes if c in done), "issues": 0})
+        return out
 
     def client_view(db, link):
         p = db.get(Project, link.project_id)
@@ -682,7 +705,8 @@ def create_app(database_url=None, storage_dir=None):
         validation = {**full, "blockers": keep(full["blockers"]), "clarifications": keep(full["clarifications"]),
                       "applicable_codes": [c for c in full["applicable_codes"] if c in CLIENT_CODES],
                       "required_codes": [c for c in full["required_codes"] if c in CLIENT_CODES],
-                      "sections": [s for s in full["sections"] if s["id"] != "E"]}
+                      }
+        validation["sections"] = client_sections(validation["applicable_codes"], validation["required_codes"], answers)
         view = public_view(db, link)
         return {"id": "me", "name": p.name, "customer": p.customer, "revision": p.revision, "status": "DRAFT", "answers": answers,
                 "validation": validation, "sources": view["files"], "feedback": [], "approvals": [], "snapshots": [],
@@ -691,12 +715,16 @@ def create_app(database_url=None, storage_dir=None):
     @app.get("/api/v1/public/{token}/questions")
     def public_questions(token: str, db=Depends(db_session)):
         link_for(db, token)
-        questions = [json.loads(json.dumps(q)) for q in QUESTIONS if q["code"] in CLIENT_CODES]
+        by_code = {q["code"]: q for q in QUESTIONS}
+        questions = [json.loads(json.dumps(by_code[c])) for c in CLIENT_ORDER if c in CLIENT_CODES]
+        for q in questions:
+            q["section"] = STEP_OF[q["code"]]
+            q["group"] = "A"
         for q in questions:  # gợi ý dành cho nhân viên không hợp với khách
             for f in q["fields"]:
                 if "tab Tài liệu" in (f.get("example") or ""):
                     f["example"] = "Dán link, hoặc bấm “Thêm ảnh, video hoặc ghi âm” bên dưới"
-        return {"template_version": TEMPLATE_VERSION, "sections": [s for s in SECTIONS if s["id"] != "E"], "questions": questions}
+        return {"template_version": TEMPLATE_VERSION, "sections": [{k: st[k] for k in ("id", "title", "subtitle", "part")} for st in CLIENT_STEPS], "questions": questions}
 
     @app.get("/api/v1/public/{token}/project")
     def public_project(token: str, db=Depends(db_session)):
