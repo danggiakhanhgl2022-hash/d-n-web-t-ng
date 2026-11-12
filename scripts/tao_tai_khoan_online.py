@@ -52,11 +52,16 @@ def ask_password():
 def main():
     print("Bước 1: vào Neon > Kết nối > bấm 'Sao chép đoạn mã' để chép chuỗi kết nối vào clipboard.")
     input("Bước 2: chép xong thì nhấn Enter ở đây (chuỗi sẽ được đọc từ clipboard, không hiện lên màn hình): ")
+    pattern = r"postgres(?:ql)?(?:\+psycopg)?://[^\s'\"]+"
     raw = read_clipboard()
-    match = re.search(r"postgres(?:ql)?(?:\+psycopg)?://[^\s'\"]+", raw)
+    match = re.search(pattern, raw)
     if not match:
-        print(f"Clipboard không có 'postgresql://' (độ dài nội dung: {len(raw)} ký tự).")
-        print("Hãy bấm 'Sao chép đoạn mã' trong Neon (hộp thoại Kết nối), rồi chạy lại công cụ.")
+        print(f"Clipboard không có 'postgresql://' (độ dài nội dung: {len(raw)} ký tự, bắt đầu bằng: {raw[:10]!r}).")
+        print("Cách khác: nhấn chuột phải trong cửa sổ này để DÁN chuỗi. Chuỗi sẽ hiện trên màn hình, đừng chụp màn hình lúc này.")
+        raw = input("Dán chuỗi kết nối Neon rồi nhấn Enter: ").strip()
+        match = re.search(pattern, raw)
+    if not match:
+        print(f"Vẫn không thấy 'postgresql://' (độ dài: {len(raw)} ký tự). Lấy lại chuỗi từ Neon > Kết nối > Sao chép đoạn mã.")
         return 1
     url = match.group(0)
     url = normalize_database_url(url)
