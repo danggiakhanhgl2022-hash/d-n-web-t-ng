@@ -669,27 +669,22 @@ def create_app(database_url=None, storage_dir=None):
     def public_info(token: str, db=Depends(db_session)):
         return public_view(db, link_for(db, token))
 
-    # Phiếu khách gọn: tập trung video giới thiệu sản phẩm và quảng cáo mạng xã hội, chia thành từng bước.
-    # Thứ tự: mục đích và loại video trước, "đã từng làm video chưa" để cuối. Nhân viên vẫn thấy đủ bộ câu hỏi.
-    CLIENT_STEPS = [
-        {"id": "S1", "title": "Bạn cần video gì", "subtitle": "Mục đích, hình thức, bạn đã có ý tưởng hay kịch bản chưa", "part": "Phần A", "codes": ["A3", "P3", "P2", "A4"]},
-        {"id": "S2", "title": "Nội dung chính", "subtitle": "Điều quan trọng nhất và cảm giác mong muốn", "part": "Phần A", "codes": ["A5", "C2.1", "A11"]},
-        {"id": "S3", "title": "Hình thức video", "subtitle": "Số lượng, khung hình, nơi đăng, giọng đọc", "part": "Phần A", "codes": ["A7", "A8", "A9", "A10", "C7.1"]},
-        {"id": "S4", "title": "Bạn đã có gì", "subtitle": "Tư liệu, điều cần tránh, quyền dùng AI", "part": "Phần B", "codes": ["A12", "A13", "A17"]},
-        {"id": "S5", "title": "Thời gian và chi phí", "subtitle": "Khi nào cần và ngân sách dự kiến", "part": "Phần B", "codes": ["P4", "A15"]},
-        {"id": "S6", "title": "Cách liên hệ", "subtitle": "Để studio gửi báo giá cho bạn", "part": "Phần B", "codes": ["A1", "A2"]},
-        {"id": "S7", "title": "Một câu cuối", "subtitle": "Giúp studio chọn cách trao đổi phù hợp", "part": "Phần B", "codes": ["P1"]},
-    ]
-    STEP_OF = {c: st["id"] for st in CLIENT_STEPS for c in st["codes"]}
-    CLIENT_ORDER = [c for st in CLIENT_STEPS for c in st["codes"]]
-    CLIENT_CODES = {q["code"] for q in QUESTIONS if q["code"] in STEP_OF and q.get("audience") != "internal"}
+    # Phiếu khách: giữ bộ câu hỏi gốc, chỉ ẩn nhánh ngoài phạm vi (video doanh nghiệp/sự kiện, đồ họa LED).
+    # Câu "đã từng đặt làm video chưa" (P1) chuyển xuống cuối. Nhân viên vẫn thấy đủ bộ câu hỏi.
+    OUT_OF_SCOPE_SECTIONS = {"C3", "C4"}
+    OUT_OF_SCOPE_OPTIONS = {"CORP", "MOTION"}
+    CLIENT_STEPS = [dict(s) for s in SECTIONS if s["id"] not in OUT_OF_SCOPE_SECTIONS and s["id"] != "E"]
+    CLIENT_STEPS.append({"id": "P-END", "title": "Một câu cuối", "subtitle": "Giúp studio chọn cách trao đổi phù hợp", "part": "Phần 0"})
+    CLIENT_CODES = {q["code"] for q in QUESTIONS if q.get("audience") != "internal" and q["section"] not in OUT_OF_SCOPE_SECTIONS}
+    STEP_OF = {q["code"]: ("P-END" if q["code"] == "P1" else q["section"]) for q in QUESTIONS if q["code"] in CLIENT_CODES}
+    CLIENT_ORDER = [q["code"] for q in QUESTIONS if q["code"] in CLIENT_CODES and q["code"] != "P1"] + ["P1"]
 
     def client_sections(applicable, required, answers):
         app, req = set(applicable), set(required)
         done = {a["question_code"] for a in answers if a.get("value") is not None}
         out = []
         for st in CLIENT_STEPS:
-            codes = [c for c in st["codes"] if c in app]
+            codes = [c for c in CLIENT_ORDER if STEP_OF.get(c) == st["id"] and c in app]
             out.append({"id": st["id"], "applicable": bool(codes), "total": len(codes), "required": sum(1 for c in codes if c in req),
                         "answered": sum(1 for c in codes if c in done), "confirmed": sum(1 for c in codes if c in done), "issues": 0})
         return out
@@ -719,7 +714,9 @@ def create_app(database_url=None, storage_dir=None):
         questions = [json.loads(json.dumps(by_code[c])) for c in CLIENT_ORDER if c in CLIENT_CODES]
         for q in questions:
             q["section"] = STEP_OF[q["code"]]
-            q["group"] = "A"
+            for f in q["fields"]:
+                if q["code"] == "P3" and f.get("options"):
+                    f["options"] = [o for o in f["options"] if o["id"] not in OUT_OF_SCOPE_OPTIONS]
         for q in questions:  # gợi ý dành cho nhân viên không hợp với khách
             for f in q["fields"]:
                 if "tab Tài liệu" in (f.get("example") or ""):
