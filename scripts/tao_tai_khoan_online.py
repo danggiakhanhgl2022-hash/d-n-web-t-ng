@@ -7,6 +7,7 @@ The connection string and passwords are typed with hidden input and are never pr
 """
 import getpass
 import re
+import subprocess
 import sys
 from pathlib import Path
 
@@ -19,6 +20,18 @@ from app.bootstrap import create_owner  # noqa: E402
 from app.db import make_engine, make_session_factory, normalize_database_url  # noqa: E402
 from app.models import User  # noqa: E402
 from app.security import hash_password  # noqa: E402
+
+
+def read_clipboard():
+    for exe in ("powershell", "pwsh"):
+        try:
+            out = subprocess.run([exe, "-NoProfile", "-Command", "Get-Clipboard -Raw"],
+                                 capture_output=True, text=True, timeout=15)
+            if out.returncode == 0 and out.stdout.strip():
+                return out.stdout.strip()
+        except (OSError, subprocess.SubprocessError):
+            continue
+    return ""
 
 
 def ask_password():
@@ -37,11 +50,13 @@ def ask_password():
 
 
 def main():
-    raw = getpass.getpass("Dán chuỗi kết nối Neon (chứa postgresql://, gõ không hiện chữ): ").strip()
+    print("Bước 1: vào Neon > Kết nối > bấm 'Sao chép đoạn mã' để chép chuỗi kết nối vào clipboard.")
+    input("Bước 2: chép xong thì nhấn Enter ở đây (chuỗi sẽ được đọc từ clipboard, không hiện lên màn hình): ")
+    raw = read_clipboard()
     match = re.search(r"postgres(?:ql)?(?:\+psycopg)?://[^\s'\"]+", raw)
     if not match:
-        print(f"Không thấy 'postgresql://' trong nội dung vừa dán (độ dài {len(raw)} ký tự).")
-        print("Có thể bạn đã dán nhầm địa chỉ web hoặc ô dán đang trống. Vào Neon > Kết nối > Sao chép đoạn mã rồi thử lại.")
+        print(f"Clipboard không có 'postgresql://' (độ dài nội dung: {len(raw)} ký tự).")
+        print("Hãy bấm 'Sao chép đoạn mã' trong Neon (hộp thoại Kết nối), rồi chạy lại công cụ.")
         return 1
     url = match.group(0)
     url = normalize_database_url(url)
