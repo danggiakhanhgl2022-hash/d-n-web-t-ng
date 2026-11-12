@@ -1,2 +1,2 @@
-// Lối riêng cho nhân viên: khách vào trang chủ sẽ được đưa thẳng tới phiếu, không thấy đăng nhập.
+// Lối riêng cho nhân viên đăng nhập.
 export {default} from "../page";
