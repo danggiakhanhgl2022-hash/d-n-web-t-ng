@@ -113,8 +113,8 @@ export default function ClientPage() {
   if (phase === "welcome") return <main className="gui-screen welcome" style={themeVars}>
     <div className="gui-card hero">
       <span className="gui-eyebrow">{studio.toUpperCase()}</span>
-      <h1>Chào anh chị, cảm ơn đã quan tâm đến dịch vụ làm video của {studio}</h1>
-      <p>Đây là nơi {studio} tiếp nhận yêu cầu của anh chị để hiểu rõ nhu cầu, từ đó đề xuất phương án và báo giá phù hợp. Anh chị chỉ cần trả lời giúp một số câu hỏi ngắn bên dưới. Chỗ nào chưa chắc cứ bấm “Chưa biết”, studio sẽ tư vấn thêm.</p>
+      <h1>Chào anh chị, cảm ơn đã quan tâm đến {studio}</h1>
+      <p>Anh chị trả lời giúp vài câu ngắn để {studio} hiểu nhu cầu, rồi đề xuất phương án và báo giá phù hợp. Chỗ nào chưa chắc cứ bấm “Chưa biết”.</p>
       <ul className="gui-points">
         <li><b>Khoảng 5–7 phút</b><span>Phần lớn chỉ cần bấm chọn</span></li>
         <li><b>Không cần tài khoản</b><span>Tự lưu từng bước, quay lại bằng link này</span></li>

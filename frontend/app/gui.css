@@ -143,15 +143,3 @@
 .wizard-progress{height:6px;border-radius:999px;background:var(--b-line,#e5dfd6);margin-top:26px;overflow:hidden}
 .wizard-progress i{display:block;height:100%;background:var(--b-primary,#e4572e);border-radius:inherit;transition:width .3s ease}
 .wizard-progress+.wizard-nav{margin-top:14px;border-top:0;padding-top:0}
-
-/* Màn chào gọn, vừa một màn hình */
-.gui-screen.welcome{padding:20px}
-.gui-screen.welcome .gui-card{width:min(860px,100%);padding:28px 34px}
-.gui-screen.welcome .gui-card h1{font-size:clamp(24px,3vw,32px);line-height:1.2;margin:6px 0 10px}
-.gui-screen.welcome .gui-card p{font-size:16px;line-height:1.5;margin:0 0 14px}
-.gui-screen.welcome .gui-points{grid-template-columns:repeat(3,1fr);gap:10px;margin:14px 0 18px}
-.gui-screen.welcome .gui-points li{padding:10px 12px}
-.gui-screen.welcome .gui-points b{font-size:15px}.gui-screen.welcome .gui-points span{font-size:13.5px}
-.gui-screen.welcome .gui-start{padding:13px 26px;font-size:16px}
-@media (max-width:640px){.gui-screen.welcome .gui-points{grid-template-columns:1fr}.gui-screen.welcome .gui-card{padding:22px 18px}}
-@media (max-height:700px){.gui-screen.welcome .gui-card p{font-size:15px}.gui-screen.welcome .gui-points{display:none}}
