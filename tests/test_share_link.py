@@ -65,6 +65,11 @@ def test_client_answers_whole_form_on_web(api, app):
     codes = {q["code"] for q in qs["questions"]}
     assert "E1" not in codes and "P1" in codes and all(s["id"] != "E" for s in qs["sections"])
     assert not {c for c in codes if c.startswith(("C3.", "C4."))} and qs["questions"][-1]["code"] == "P1"
+    assert [q["code"] for q in qs["questions"]] == ["A3", "P3", "A6", "A4", "A7", "A8", "A9", "A11", "A5", "P2", "A12", "A13", "A10", "C7.1", "A17", "P4", "A15", "A1", "A2", "P1"]
+    byc = {q["code"]: q for q in qs["questions"]}
+    assert not {"YOUTUBE", "LED", "TV"} & {o["id"] for o in byc["A9"]["fields"][0]["options"]}
+    assert [o["id"] for o in byc["A7"]["fields"][1]["options"]] == ["9:16"]
+    assert all("bạn" not in q["label"].lower() and "ạ?" not in q["label"] for q in qs["questions"])
     p3 = next(q for q in qs["questions"] if q["code"] == "P3")
     assert not {"CORP", "MOTION"} & {o["id"] for o in p3["fields"][0]["options"]}
     assert anon.put(f"/api/v1/public/{token}/answers/E1", json={"expected_revision": 1, "value": {"x": 1}}).status_code == 403

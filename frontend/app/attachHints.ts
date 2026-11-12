@@ -2,7 +2,7 @@
 export const ATTACH_HINT: Record<string, string> = {
   "P2": "Gửi kèm brief, kịch bản, video cũ hoặc video mẫu nếu có.",
   "A1": "Gửi kèm logo của đơn vị nếu có.",
-  "A11": "Gửi kèm hình hoặc video thể hiện đúng cảm giác bạn muốn.",
+  "A11": "Gửi kèm hình hoặc video thể hiện đúng cảm giác anh chị muốn.",
   "A12": "Gửi kèm logo, ảnh sản phẩm hoặc hình người thật nếu có.",
   "A13": "Gửi kèm tài liệu ghi câu chữ phải giữ nguyên nếu có.",
   "A18": "Gửi kèm giấy tờ chứng minh quyền dùng ảnh, nhạc, giọng nếu có.",
@@ -15,7 +15,7 @@ export const ATTACH_HINT: Record<string, string> = {
   "C4.2": "Gửi kèm file mẫu hoặc thiết kế gốc nếu có.",
   "C5.1": "Gửi kèm ảnh thật của nhân vật hoặc sản phẩm cần giống hệt.",
   "C6.1": "Gửi kèm ảnh các địa điểm quay nếu có.",
-  "C7.1": "Gửi kèm giọng mẫu bạn thích, hoặc bấm Ghi âm để đọc thử vài câu.",
+  "C7.1": "Gửi kèm giọng mẫu anh chị thích, hoặc bấm Ghi âm để đọc thử vài câu.",
   "C7.2": "Chọn bài nhạc mẫu từ máy, hoặc dán link vào ô trên.",
   "C7.3": "Gửi kèm file âm thanh hiệu ứng bắt buộc.",
 };

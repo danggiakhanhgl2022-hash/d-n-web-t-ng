@@ -11,7 +11,7 @@ type SaveState = "saving" | "saved" | "error";
 type Props = {project: Obj; setProject: (p: Obj) => void; questions: QDef[]; sections: SectionDef[]; api: (path: string, init?: RequestInit) => Promise<any>; editable: boolean; reviewer: boolean; onReview: () => void; onError: (message: string) => void; client?: boolean; attach?: (code: string) => ReactNode; finale?: ReactNode};
 
 const STATUS: Record<string, string> = {CONFIRMED: "Đã xác nhận", ANSWERED_UNCONFIRMED: "Chờ xác nhận", PROPOSED_FROM_SOURCE: "Gợi ý từ tài liệu", NEEDS_CONSULTATION: "Cần tư vấn", CONFLICTED: "Có mâu thuẫn", UNKNOWN: "Chưa xác định", NOT_APPLICABLE: "Không áp dụng"};
-const CLIENT_PART: Record<string, string> = {"Phần 0": "Mở đầu", "Phần A": "Về video của bạn", "Phần B": "Về bạn và nhu cầu", "Phần C": "Chi tiết theo loại video", "Phần D": "Theo từng cảnh"};
+const CLIENT_PART: Record<string, string> = {"Phần 0": "Phiếu câu hỏi", "Phần A": "Về video của bạn", "Phần B": "Về bạn và nhu cầu", "Phần C": "Chi tiết theo loại video", "Phần D": "Theo từng cảnh"};
 const PART_NOTE: Record<string, string> = {"Phần 0": "Chọn đường đi", "Phần A": "Câu hỏi lõi", "Phần B": "Theo kiểu khách", "Phần C": "Theo loại video", "Phần D": "Theo cảnh", "Phần E": "Nội bộ"};
 const SAVE_DELAY = 850;
 const todayISO = () => {const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;};

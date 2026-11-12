@@ -34,7 +34,7 @@ export default function ClientPage() {
     if (!response.ok) {
       let data: Obj = {};
       try {data = await response.json();} catch { /* bỏ qua */ }
-      const err: Error & {code?: string; details?: Obj[]} = new Error(data.error?.message || "Có lỗi xảy ra, bạn thử lại nhé.");
+      const err: Error & {code?: string; details?: Obj[]} = new Error(data.error?.message || "Có lỗi xảy ra, anh chị thử lại nhé.");
       err.code = data.error?.code; err.details = data.error?.details;
       throw err;
     }
@@ -72,9 +72,9 @@ export default function ClientPage() {
       let data: Obj = {};
       try {data = JSON.parse(xhr.responseText);} catch { /* bỏ qua */ }
       if (xhr.status >= 200 && xhr.status < 300) {setProject(data); resolve();}
-      else reject(new Error(data.error?.message || "Chưa gửi được tệp, bạn thử lại nhé."));
+      else reject(new Error(data.error?.message || "Chưa gửi được tệp, anh chị thử lại nhé."));
     };
-    xhr.onerror = () => reject(new Error("Mất kết nối giữa chừng. Bạn kiểm tra mạng rồi thử lại, tệp chưa bị mất."));
+    xhr.onerror = () => reject(new Error("Mất kết nối giữa chừng. Anh chị kiểm tra mạng rồi thử lại, tệp chưa bị mất."));
     xhr.send(form);
   }), [token]);
 
@@ -104,7 +104,7 @@ export default function ClientPage() {
       setProject(data); setMissing([]); setPhase("thanks");
       window.scrollTo({top: 0});
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Chưa gửi được, bạn thử lại nhé.");
+      setError(e instanceof Error ? e.message : "Chưa gửi được, anh chị thử lại nhé.");
     } finally {setBusy(false);}
   };
   const jump = (code: string) => {
@@ -112,8 +112,8 @@ export default function ClientPage() {
     el?.scrollIntoView({behavior: "smooth", block: "center"});
   };
 
-  if (phase === "loading") return <main className="gui-screen" style={themeVars}><p className="gui-quiet">Đang mở phiếu của bạn…</p></main>;
-  if (phase === "invalid") return <main className="gui-screen" style={themeVars}><div className="gui-card"><span className="gui-eyebrow">{studio.toUpperCase()}</span><h1>Đường link này không dùng được nữa</h1><p>Link có thể đã hết hạn hoặc được thay bằng link mới. Bạn nhắn cho {studio} để nhận link mới nhé, mọi thứ bạn đã điền trước đó vẫn còn.</p></div></main>;
+  if (phase === "loading") return <main className="gui-screen" style={themeVars}><p className="gui-quiet">Đang mở phiếu của anh chị…</p></main>;
+  if (phase === "invalid") return <main className="gui-screen" style={themeVars}><div className="gui-card"><span className="gui-eyebrow">{studio.toUpperCase()}</span><h1>Đường link này không dùng được nữa</h1><p>Link có thể đã hết hạn hoặc được thay bằng link mới. Anh chị nhắn cho {studio} để nhận link mới nhé, mọi thứ anh chị đã điền trước đó vẫn còn.</p></div></main>;
   if (phase === "welcome") return <main className="gui-screen welcome gui-skin" style={themeVars}>
     <div className="gui-card hero">
       <span className="gui-eyebrow">01 — XIN CHÀO</span>

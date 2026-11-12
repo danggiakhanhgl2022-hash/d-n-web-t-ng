@@ -20,8 +20,8 @@ function mb(n: number) {return `${Math.round(n / 1024 / 1024)} MB`;}
 function precheck(file: File, limits: Limits): string | null {
   const ext = file.name.split(".").pop()?.toLowerCase() || "";
   const kind = KIND[ext];
-  if (kind && file.size > limits[kind]) return `${KIND_NAME[kind]} “${file.name}” nặng ${sizeText(file.size)}, tối đa ${mb(limits[kind])}. Bạn có thể dán link Google Drive vào câu trả lời thay vì tải lên.`;
-  if (!kind && !["pdf", "docx", "txt", "md"].includes(ext)) return `Mình chưa nhận loại tệp “.${ext}”. Hãy gửi ảnh, ghi âm, video hoặc PDF.`;
+  if (kind && file.size > limits[kind]) return `${KIND_NAME[kind]} “${file.name}” nặng ${sizeText(file.size)}, tối đa ${mb(limits[kind])}. Anh chị có thể dán link Google Drive vào câu trả lời thay vì tải lên.`;
+  if (!kind && !["pdf", "docx", "txt", "md"].includes(ext)) return `Chúng tôi chưa nhận loại tệp “.${ext}”. Hãy gửi ảnh, ghi âm, video hoặc PDF.`;
   if (!kind && file.size > 10 * 1024 * 1024) return `Tệp “${file.name}” nặng ${sizeText(file.size)}, tài liệu tối đa 10 MB.`;
   return null;
 }
@@ -74,7 +74,7 @@ export default function Attach({code, files, limits, upload, remove, label, hint
         return s + 1;
       }), 1000);
     } catch {
-      setItems(list => [...list, {key: `${Date.now()}`, name: "Ghi âm", ratio: 0, error: "Trình duyệt chưa được cho phép dùng micro. Bạn bấm vào biểu tượng khóa cạnh thanh địa chỉ để bật, hoặc chọn tệp ghi âm có sẵn."}]);
+      setItems(list => [...list, {key: `${Date.now()}`, name: "Ghi âm", ratio: 0, error: "Trình duyệt chưa được cho phép dùng micro. Anh chị bấm vào biểu tượng khóa cạnh thanh địa chỉ để bật, hoặc chọn tệp ghi âm có sẵn."}]);
     }
   };
   const stopRecording = (recorder?: MediaRecorder) => {

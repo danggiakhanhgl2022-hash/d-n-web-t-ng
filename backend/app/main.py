@@ -650,12 +650,12 @@ def create_app(database_url=None, storage_dir=None):
         recent = [t for t in starts.get(host, []) if stamp - t < 3600]
         total = sum(1 for times in starts.values() for t in times if stamp - t < 3600)
         if len(recent) >= 8 or total >= 200:
-            raise Problem(429, "TOO_MANY_STARTS", "Bạn mở phiếu quá nhiều lần trong một giờ. Hãy quay lại link đã có hoặc thử lại sau.")
+            raise Problem(429, "TOO_MANY_STARTS", "Anh chị mở phiếu quá nhiều lần trong một giờ. Hãy quay lại link đã có hoặc thử lại sau.")
         starts[host] = recent + [stamp]
         tenant = db.scalar(select(Tenant).order_by(Tenant.id))
         owner = db.scalar(select(User).where(User.tenant_id == tenant.id, User.active == True, User.role == "ADMIN").order_by(User.id)) if tenant else None  # noqa: E712
         if not owner:
-            raise Problem(503, "NOT_READY", "Studio chưa sẵn sàng nhận phiếu, bạn thử lại sau nhé.")
+            raise Problem(503, "NOT_READY", "Studio chưa sẵn sàng nhận phiếu, anh chị thử lại sau nhé.")
         p = Project(tenant_id=tenant.id, name="Khách mới " + datetime.now(ZoneInfo("Asia/Ho_Chi_Minh")).strftime("%d/%m %H:%M"), customer="")
         db.add(p)
         db.flush()
@@ -671,13 +671,52 @@ def create_app(database_url=None, storage_dir=None):
 
     # Phiếu khách: giữ bộ câu hỏi gốc, chỉ ẩn nhánh ngoài phạm vi (video doanh nghiệp/sự kiện, đồ họa LED).
     # Câu "đã từng đặt làm video chưa" (P1) chuyển xuống cuối. Nhân viên vẫn thấy đủ bộ câu hỏi.
-    OUT_OF_SCOPE_SECTIONS = {"C3", "C4"}
-    OUT_OF_SCOPE_OPTIONS = {"CORP", "MOTION"}
-    CLIENT_STEPS = [dict(s) for s in SECTIONS if s["id"] not in OUT_OF_SCOPE_SECTIONS and s["id"] != "E"]
-    CLIENT_STEPS.append({"id": "P-END", "title": "Một câu cuối", "subtitle": "Giúp studio chọn cách trao đổi phù hợp", "part": "Phần 0"})
-    CLIENT_CODES = {q["code"] for q in QUESTIONS if q.get("audience") != "internal" and q["section"] not in OUT_OF_SCOPE_SECTIONS}
-    STEP_OF = {q["code"]: ("P-END" if q["code"] == "P1" else q["section"]) for q in QUESTIONS if q["code"] in CLIENT_CODES}
-    CLIENT_ORDER = [q["code"] for q in QUESTIONS if q["code"] in CLIENT_CODES and q["code"] != "P1"] + ["P1"]
+    # Phiếu của khách: 20 câu, chia 7 nhóm theo đúng thứ tự trong flow chart đã duyệt.
+    CLIENT_PLAN = [
+        ("G1", "Mục đích và loại video", "Video này dùng để làm gì", ["A3", "P3", "A6", "A4"]),
+        ("G2", "Hình thức video", "Số lượng, độ dài, nơi đăng và phong cách", ["A7", "A8", "A9", "A11"]),
+        ("G3", "Nội dung và ý tưởng", "Điều anh chị muốn nói và những gì đã có", ["A5", "P2", "A12", "A13", "A10"]),
+        ("G4", "Giọng đọc và AI", "Giọng đọc và việc dùng AI", ["C7.1", "A17"]),
+        ("G5", "Thời gian và chi phí", "Thời hạn và ngân sách dự kiến", ["P4", "A15"]),
+        ("G6", "Cách liên hệ", "Để chúng tôi liên hệ lại với anh chị", ["A1", "A2"]),
+        ("G7", "Một câu cuối", "Giúp chúng tôi chọn cách trao đổi phù hợp", ["P1"]),
+    ]
+    CLIENT_STEPS = [{"id": g, "title": t, "subtitle": sub, "part": "Phần 0"} for g, t, sub, _ in CLIENT_PLAN]
+    CLIENT_ORDER = [c for _, _, _, codes in CLIENT_PLAN for c in codes]
+    CLIENT_CODES = set(CLIENT_ORDER)
+    STEP_OF = {c: g for g, _, _, codes in CLIENT_PLAN for c in codes}
+    CLIENT_LABELS = {
+        "A3": "Xin hỏi, video này anh chị định dùng để làm gì?",
+        "P3": "Anh chị đang muốn làm loại video nào?",
+        "A6": "Sau khi xem video, anh chị muốn người xem làm gì?",
+        "A4": "Xin hỏi, người xem video của anh chị là những ai?",
+        "A7": "Anh chị cần làm bao nhiêu video?",
+        "A8": "Mỗi video anh chị muốn dài khoảng bao lâu?",
+        "A9": "Anh chị định đăng video này ở đâu?",
+        "A11": "Anh chị mong video có phong cách như thế nào?",
+        "A5": "Anh chị muốn người xem nhớ nhất điều gì?",
+        "P2": "Hiện tại anh chị đã chuẩn bị được những gì rồi?",
+        "A12": "Anh chị đã có sẵn những thứ này chưa?",
+        "A13": "Anh chị có điều gì cần tránh, hoặc câu chữ nào cần giữ nguyên không?",
+        "A10": "Anh chị muốn video dùng ngôn ngữ nào?",
+        "C7.1": "Anh chị muốn giọng đọc như thế nào?",
+        "A17": "Anh chị có đồng ý cho chúng tôi dùng AI để tạo hình ảnh, video và giọng đọc không?",
+        "P4": "Khi nào anh chị cần có video?",
+        "A15": "Anh chị dự định chi khoảng bao nhiêu cho video này?",
+        "A1": "Xin phép hỏi, dự án của anh chị tên là gì, và anh chị thuộc đơn vị nào?",
+        "A2": "Anh chị vui lòng cho chúng tôi biết tên, và chúng tôi nên liên hệ với anh chị bằng cách nào?",
+        "P1": "Anh chị đã từng đặt làm video bao giờ chưa?",
+    }
+    CLIENT_HELP = {"A3": "Anh chị chọn một mục chính.", "P3": "Anh chị chọn được nhiều mục.", "P2": "Anh chị chọn được nhiều mục.",
+                   "A11": "Anh chị chọn tối đa hai.", "A5": "Anh chị chọn tối đa ba."}
+    # Lựa chọn nằm ngoài phạm vi của studio (chỉ quảng cáo, giới thiệu sản phẩm đăng mạng xã hội, khung dọc, tối đa 60 giây)
+    CLIENT_DROP_OPTIONS = {("P3", "v"): {"CORP", "MOTION"}, ("A7", "ratios"): {"16:9", "1:1", "4:5"},
+                           ("A8", "length"): {"M1_3", "GT3"}, ("A9", "where"): {"YOUTUBE", "LED", "TV"}}
+    CLIENT_HIDE_FIELDS = {("A11", "links"), ("A11", "like"), ("A11", "dislike"), ("C7.1", "sample")}
+    CLIENT_COL_LABELS = {("A12", "assets"): {"HAVE": "Có, sẽ gửi", "NEW": "Cần làm mới", "NO": "Chưa có hoặc không cần"}}
+
+    def polite(text):
+        return re.sub(r"\bbạn\b", "anh chị", re.sub(r"\bBạn\b", "Anh chị", text)) if isinstance(text, str) else text
 
     def client_sections(applicable, required, answers):
         app, req = set(applicable), set(required)
@@ -711,12 +750,26 @@ def create_app(database_url=None, storage_dir=None):
     def public_questions(token: str, db=Depends(db_session)):
         link_for(db, token)
         by_code = {q["code"]: q for q in QUESTIONS}
-        questions = [json.loads(json.dumps(by_code[c])) for c in CLIENT_ORDER if c in CLIENT_CODES]
+        questions = [json.loads(json.dumps(by_code[c])) for c in CLIENT_ORDER]
         for q in questions:
             q["section"] = STEP_OF[q["code"]]
+            q["label"] = CLIENT_LABELS[q["code"]]
+            q["help_text"] = CLIENT_HELP.get(q["code"], polite(q.get("help_text", "")))
+            fields = []
             for f in q["fields"]:
-                if q["code"] == "P3" and f.get("options"):
-                    f["options"] = [o for o in f["options"] if o["id"] not in OUT_OF_SCOPE_OPTIONS]
+                if (q["code"], f["id"]) in CLIENT_HIDE_FIELDS:
+                    continue
+                drop = CLIENT_DROP_OPTIONS.get((q["code"], f["id"]))
+                if drop and f.get("options"):
+                    f["options"] = [o for o in f["options"] if o["id"] not in drop]
+                cols = CLIENT_COL_LABELS.get((q["code"], f["id"]))
+                if cols and f.get("cols"):
+                    f["cols"] = [{**c, "label": cols.get(c["id"], c["label"])} for c in f["cols"]]
+                for key in ("label", "example"):
+                    if key in f:
+                        f[key] = polite(f[key])
+                fields.append(f)
+            q["fields"] = fields
         for q in questions:  # gợi ý dành cho nhân viên không hợp với khách
             for f in q["fields"]:
                 if "tab Tài liệu" in (f.get("example") or ""):

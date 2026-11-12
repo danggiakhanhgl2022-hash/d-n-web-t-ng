@@ -503,8 +503,8 @@
       "code": "A5",
       "group": "A",
       "section": "A-WHY",
-      "label": "Ba điều nhất định phải có trong video?",
-      "help_text": "",
+      "label": "Điều nhất định phải có trong video?",
+      "help_text": "Chọn tối đa ba.",
       "note": "",
       "required": true,
       "star": true,
@@ -513,28 +513,34 @@
       "value_type": "json",
       "fields": [
         {
-          "id": "p1",
-          "type": "text",
-          "label": "Điều 1",
-          "example": "Giá 49k",
+          "id": "v",
+          "type": "multi",
+          "label": "",
           "required": true,
-          "max_length": 2000
-        },
-        {
-          "id": "p2",
-          "type": "text",
-          "label": "Điều 2",
-          "example": "Giao trong 30 phút",
-          "required": false,
-          "max_length": 2000
-        },
-        {
-          "id": "p3",
-          "type": "text",
-          "label": "Điều 3",
-          "example": "Địa chỉ quán",
-          "required": false,
-          "max_length": 2000
+          "max_items": 3,
+          "other": true,
+          "options": [
+            {
+              "id": "PRICE",
+              "label": "Giá tốt"
+            },
+            {
+              "id": "QUALITY",
+              "label": "Chất lượng"
+            },
+            {
+              "id": "PROMO",
+              "label": "Khuyến mãi"
+            },
+            {
+              "id": "TRUST",
+              "label": "Thương hiệu uy tín"
+            },
+            {
+              "id": "FEATURE",
+              "label": "Tính năng nổi bật"
+            }
+          ]
         }
       ]
     },

@@ -26,11 +26,11 @@ export default function ClientStart() {
     try {
       const r = await fetch("/api/v1/public/start", {method: "POST"});
       const data = await r.json();
-      if (!r.ok) throw new Error(data.error?.message || "Chưa mở được phiếu, bạn thử lại nhé.");
+      if (!r.ok) throw new Error(data.error?.message || "Chưa mở được phiếu, anh chị thử lại nhé.");
       try {localStorage.setItem(KEY, data.token);} catch { /* bỏ qua */ }
       router.replace(`/gui/${data.token}`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Chưa mở được phiếu, bạn thử lại nhé.");
+      setError(e instanceof Error ? e.message : "Chưa mở được phiếu, anh chị thử lại nhé.");
       setState("ready");
     }
   }

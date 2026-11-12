@@ -114,7 +114,7 @@ GOOD_ANSWERS = {
  "A1": {"project": "Khai trương chi nhánh 2", "org": "Quán QA (dữ liệu thử)"},
  "A2": {"name": "QA Owner", "channel": "EMAIL", "contact": "qa@example.invalid"},
  "A3": {"v": "EVENT"}, "A4": {"age": "18–30", "gender": "ALL", "area": "Pleiku"},
- "A5": {"p1": "Giảm 20% tuần khai trương", "p2": "", "p3": ""},
+ "A5": {"v": ["PRICE", "PROMO"]},
  "A6": {"action": "CONTACT", "exact": "0901 234 567"},
  "A7": {"count": 2, "ratios": ["9:16"]},
  "A8": {"length": "S15_30", "strict": "FLEX"},
