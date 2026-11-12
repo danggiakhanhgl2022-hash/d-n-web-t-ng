@@ -120,7 +120,7 @@ export default function ClientPage() {
         <li><b>Không cần tài khoản</b><span>Tự lưu từng bước, quay lại bằng link này</span></li>
         <li><b>Gửi ảnh, video, ghi âm</b><span>Ngay trong từng câu hỏi</span></li>
       </ul>
-      <button type="button" className="gui-start" onClick={() => {sessionStorage.setItem(`gui-${token}`, "1"); setPhase("form");}}>Bắt đầu trả lời</button>
+      <button type="button" className="gui-start" onClick={() => {sessionStorage.setItem(`gui-${token}`, "1"); setPhase("form");}}>Vâng, tôi muốn làm video →</button>
       <small>Dự án: {project?.name}</small>
     </div>
   </main>;

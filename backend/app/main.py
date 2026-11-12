@@ -672,10 +672,10 @@ def create_app(database_url=None, storage_dir=None):
     # Phiếu khách gọn: tập trung video giới thiệu sản phẩm và quảng cáo mạng xã hội, chia thành từng bước.
     # Thứ tự: mục đích và loại video trước, "đã từng làm video chưa" để cuối. Nhân viên vẫn thấy đủ bộ câu hỏi.
     CLIENT_STEPS = [
-        {"id": "S1", "title": "Bạn cần video gì", "subtitle": "Loại video, mục đích và người xem", "part": "Phần A", "codes": ["P3", "A3", "A4"]},
+        {"id": "S1", "title": "Bạn cần video gì", "subtitle": "Mục đích, hình thức, bạn đã có ý tưởng hay kịch bản chưa", "part": "Phần A", "codes": ["A3", "P3", "P2", "A4"]},
         {"id": "S2", "title": "Nội dung chính", "subtitle": "Điều quan trọng nhất và cảm giác mong muốn", "part": "Phần A", "codes": ["A5", "C2.1", "A11"]},
         {"id": "S3", "title": "Hình thức video", "subtitle": "Số lượng, khung hình, nơi đăng, giọng đọc", "part": "Phần A", "codes": ["A7", "A8", "A9", "A10", "C7.1"]},
-        {"id": "S4", "title": "Bạn đã có gì", "subtitle": "Tư liệu, điều cần tránh, quyền dùng AI", "part": "Phần B", "codes": ["P2", "A12", "A13", "A17"]},
+        {"id": "S4", "title": "Bạn đã có gì", "subtitle": "Tư liệu, điều cần tránh, quyền dùng AI", "part": "Phần B", "codes": ["A12", "A13", "A17"]},
         {"id": "S5", "title": "Thời gian và chi phí", "subtitle": "Khi nào cần và ngân sách dự kiến", "part": "Phần B", "codes": ["P4", "A15"]},
         {"id": "S6", "title": "Cách liên hệ", "subtitle": "Để studio gửi báo giá cho bạn", "part": "Phần B", "codes": ["A1", "A2"]},
         {"id": "S7", "title": "Một câu cuối", "subtitle": "Giúp studio chọn cách trao đổi phù hợp", "part": "Phần B", "codes": ["P1"]},

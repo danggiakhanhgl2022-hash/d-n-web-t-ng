@@ -64,7 +64,7 @@ def test_client_answers_whole_form_on_web(api, app):
     qs = anon.get(f"/api/v1/public/{token}/questions").json()
     codes = {q["code"] for q in qs["questions"]}
     assert "E1" not in codes and "P1" in codes and all(s["id"] != "E" for s in qs["sections"])
-    assert len(codes) <= 20 and qs["questions"][-1]["code"] == "P1" and qs["questions"][0]["code"] == "P3"
+    assert len(codes) <= 20 and qs["questions"][-1]["code"] == "P1" and qs["questions"][0]["code"] == "A3"
     assert anon.put(f"/api/v1/public/{token}/answers/E1", json={"expected_revision": 1, "value": {"x": 1}}).status_code == 403
     early = anon.post(f"/api/v1/public/{token}/submit")
     assert early.status_code == 422 and early.json()["error"]["code"] == "INCOMPLETE"
