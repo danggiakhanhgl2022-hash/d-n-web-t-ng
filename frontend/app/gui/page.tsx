@@ -1,49 +1,44 @@
 "use client";
 
-import {useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
 
 const KEY = "gui-token";
 
-// Khách vào /gui là bắt đầu luôn: hệ thống tự mở phiếu, lần sau vào lại sẽ tiếp tục phiếu cũ.
+// Link /gui chỉ làm một việc: mở phiếu mới hoặc tiếp tục phiếu đang làm dở. Lời chào nằm ở trang chủ, không chào lại ở đây.
 export default function ClientStart() {
   const router = useRouter();
-  const [state, setState] = useState<"check" | "ready" | "busy">("check");
   const [error, setError] = useState("");
 
-  useEffect(() => {
-    let saved = "";
-    try {saved = localStorage.getItem(KEY) || "";} catch { /* bỏ qua */ }
-    if (!saved) {setState("ready"); return;}
-    fetch(`/api/v1/public/${saved}/project`, {cache: "no-store"}).then(r => {
-      if (r.ok) router.replace(`/gui/${saved}`);
-      else {try {localStorage.removeItem(KEY);} catch { /* bỏ qua */ } setState("ready");}
-    }).catch(() => setState("ready"));
-  }, [router]);
-
-  async function start() {
-    setState("busy"); setError("");
+  const open = useCallback(async () => {
+    setError("");
     try {
+      let saved = "";
+      try {saved = localStorage.getItem(KEY) || "";} catch { /* bỏ qua */ }
+      if (saved) {
+        const r = await fetch(`/api/v1/public/${saved}/project`, {cache: "no-store"});
+        if (r.ok) {router.replace(`/gui/${saved}`); return;}
+        try {localStorage.removeItem(KEY);} catch { /* bỏ qua */ }
+      }
       const r = await fetch("/api/v1/public/start", {method: "POST"});
       const data = await r.json();
-      if (!r.ok) throw new Error(data.error?.message || "Chưa mở được phiếu, anh chị thử lại nhé.");
+      if (!r.ok) throw new Error(data.error?.message || "Chưa mở được phiếu, anh chị thử lại giúp chúng tôi nhé.");
       try {localStorage.setItem(KEY, data.token);} catch { /* bỏ qua */ }
       router.replace(`/gui/${data.token}`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Chưa mở được phiếu, anh chị thử lại nhé.");
-      setState("ready");
+      setError(e instanceof Error ? e.message : "Chưa mở được phiếu, anh chị thử lại giúp chúng tôi nhé.");
     }
-  }
+  }, [router]);
 
-  if (state === "check") return <main className="gui-screen"><div className="gui-card"><p>Đang mở…</p></div></main>;
+  useEffect(() => {void open();}, [open]);
+
   return (
     <main className="gui-screen gui-skin">
-      <div className="gui-card gui-start">
-        <span className="gui-eyebrow">01 — XIN CHÀO</span>
-        <h1>Chào anh chị! <em>Mời anh chị kể về video cần làm.</em></h1>
-        <p>Bộ câu hỏi rất nhanh, khoảng 5–7 phút, mỗi câu đã có sẵn đáp án. Không cần tạo tài khoản, anh chị có thể dừng rồi quay lại tiếp bất cứ lúc nào.</p>
-        {error && <p role="alert">{error}</p>}
-        <button className="gui-cta" disabled={state === "busy"} onClick={start}>{state === "busy" ? "Đang mở phiếu…" : "Mời anh chị bắt đầu"} <span aria-hidden="true">↗</span></button>
+      <div className="gui-card">
+        <span className="gui-eyebrow">B PRODUCTIONS</span>
+        {error
+          ? <><p role="alert">{error}</p><button className="gui-cta" onClick={open}>Thử lại ↗</button></>
+          : <p>Đang chuẩn bị phiếu cho anh chị, vui lòng chờ vài giây…</p>}
       </div>
     </main>
   );

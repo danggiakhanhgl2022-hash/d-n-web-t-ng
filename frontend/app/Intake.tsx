@@ -89,7 +89,7 @@ function FieldInput({field, value, onChange, disabled, code}: {field: FieldDef; 
       const opts = [...(field.options || []), ...(field.other ? [{id: "OTHER", label: "Khác"}] : [])];
       return <div className="field">{field.label && <span className="field-label">{field.label}</span>}
         <Chips name={field.label || code} options={opts} selected={typeof raw === "string" ? [raw] : []} multi={false} disabled={disabled} onToggle={idv => set(raw === idv ? null : idv)} />
-        {field.other && <input className="other-input" aria-label="Ý khác của bạn" disabled={disabled} value={typeof value[otherKey] === "string" ? value[otherKey] : ""} placeholder="Ý khác của bạn (nếu có), gõ vào đây" onChange={e => onChange({...value, [otherKey]: e.target.value, ...(e.target.value.trim() && raw !== "OTHER" ? {[field.id]: "OTHER"} : {})})} />}
+        {field.other && <input className="other-input" aria-label="Ý khác" disabled={disabled} value={typeof value[otherKey] === "string" ? value[otherKey] : ""} placeholder="Ý khác (nếu có), gõ vào đây" onChange={e => onChange({...value, [otherKey]: e.target.value, ...(e.target.value.trim() && raw !== "OTHER" ? {[field.id]: "OTHER"} : {})})} />}
       </div>;
     }
     case "multi": {
@@ -97,7 +97,7 @@ function FieldInput({field, value, onChange, disabled, code}: {field: FieldDef; 
       const opts = [...(field.options || []), ...(field.other ? [{id: "OTHER", label: "Khác"}] : [])];
       return <div className="field">{field.label && <span className="field-label">{field.label}{field.max_items && <span className="optional"> · tối đa {field.max_items}</span>}</span>}
         <Chips name={field.label || code} options={opts} selected={list} multi disabled={disabled} exclusive={field.exclusive} max={field.max_items} onToggle={idv => set(toggleIn(list, idv, field.exclusive || []))} />
-        {field.other && <input className="other-input" aria-label="Ý khác của bạn" disabled={disabled} value={typeof value[otherKey] === "string" ? value[otherKey] : ""} placeholder="Ý khác của bạn (nếu có), gõ vào đây" onChange={e => onChange({...value, [otherKey]: e.target.value, ...(e.target.value.trim() && !list.includes("OTHER") ? {[field.id]: [...list, "OTHER"]} : {})})} />}
+        {field.other && <input className="other-input" aria-label="Ý khác" disabled={disabled} value={typeof value[otherKey] === "string" ? value[otherKey] : ""} placeholder="Ý khác (nếu có), gõ vào đây" onChange={e => onChange({...value, [otherKey]: e.target.value, ...(e.target.value.trim() && !list.includes("OTHER") ? {[field.id]: [...list, "OTHER"]} : {})})} />}
       </div>;
     }
     case "matrix_single":
@@ -178,7 +178,7 @@ function QuestionCard({q, index, answer, draft, dirty, saveState, required, issu
   return <article className={`q-card ${confirmed ? "confirmed" : ""} ${issues.length && !dirty ? "has-issue" : ""} ${q.audience === "internal" ? "internal" : ""}`} style={{"--i": index} as CSSProperties} data-question-code={q.code}>
     <header className="q-head">
       {!client && <span className="q-code">{q.code}</span>}
-      <div className="q-title"><h3>{q.label}{required && <span className="req" title={client ? "Câu này giúp mình báo giá chính xác" : "Bắt buộc"}> ★</span>}</h3>{q.help_text && <p className="q-help">{q.help_text}</p>}</div>
+      <div className="q-title"><h3>{q.label}{required && <span className="req" title={client ? "Câu này giúp chúng tôi báo giá chính xác" : "Bắt buộc"}> ★</span>}</h3>{q.help_text && <p className="q-help">{q.help_text}</p>}</div>
       {!client && <span className={`q-status s-${status}`}>{confirmed && <Check on />}{status === "EDITING" ? "Đang sửa" : STATUS[status] || "Chưa trả lời"}</span>}
     </header>
     <div className={`q-body ${na || consult ? "muted-body" : ""}`}>
@@ -339,9 +339,9 @@ export default function Intake({project, setProject, questions, sections, api, e
       <div className="scene" aria-hidden="true"><span className="orb o1" /><span className="orb o2" /><span className="orb o3" /><span className="grain" /></div>
       <div className="hero-copy">
         {client ? <>
-          <span className="eyebrow">{(brand?.studio_name || "Studio").toUpperCase()}</span>
-          <h1>Kể cho mình nghe video bạn cần</h1>
-          <p>Dự án: {project.name}. Bạn có thể dừng bất cứ lúc nào, câu trả lời được lưu tự động và bạn quay lại bằng đúng đường link này.</p>
+          <span className="eyebrow">B PRODUCTIONS</span>
+          <h1>Phiếu câu hỏi của anh chị</h1>
+          <p>Anh chị trả lời lần lượt các câu bên dưới. Câu trả lời được lưu tự động, anh chị có thể dừng bất cứ lúc nào và quay lại bằng đúng đường link này.</p>
         </> : <>
           <span className="eyebrow">{(brand?.tagline || "Phiếu tiếp nhận yêu cầu video").toUpperCase()}{brand?.studio_name ? ` · ${brand.studio_name}` : ""}</span>
           <h1>{project.name}</h1>
@@ -392,7 +392,7 @@ export default function Intake({project, setProject, questions, sections, api, e
               <div className="scene" aria-hidden="true"><span className="orb o1" /><span className="orb o2" /><span className="orb o3" /><span className="grain" /></div>
               <span className="chapter-no" aria-hidden="true">{String(idx + 1).padStart(2, "0")}</span>
               <div className="chapter-copy">
-                <span className="eyebrow">{client ? `Phần ${idx + 1} / ${visible.length}` : `${sec.part}${/^[BC]/.test(sec.id) ? ` · ${sec.id}` : ""} · Chương ${idx + 1}/${visible.length}`}</span>
+                <span className="eyebrow">{client ? `${String(idx + 1).padStart(2, "0")} — ${String(visible.length).padStart(2, "0")}` : `${sec.part}${/^[BC]/.test(sec.id) ? ` · ${sec.id}` : ""} · Chương ${idx + 1}/${visible.length}`}</span>
                 <h2 id={`title-${sec.id}`}>{sec.title}</h2>
                 <p>{sec.subtitle}</p>
                 <div className="chapter-meta">

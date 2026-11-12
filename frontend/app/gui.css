@@ -162,3 +162,13 @@
 .gui-finale .gui-submit{appearance:none;border:0;width:100%;cursor:pointer;padding:18px 24px;border-radius:4px;background:#F6F3EE;color:var(--chd-ink);font:700 16px/1 inherit;font-family:inherit;letter-spacing:.14em;display:flex;justify-content:center;gap:10px}
 .gui-finale .gui-submit:disabled{opacity:.4;cursor:not-allowed}
 .gui-finale .gui-eyebrow{color:rgba(246,243,238,.62)}
+
+/* Phiếu của khách gọn như một trang cuộn của CHD: mỗi nhóm chỉ là một tiêu đề đánh số, không còn ảnh nền cao 340px, để khách không phải cuộn qua 7 màn hình lớn */
+.gui-skin .intake .intake-hero{padding:22px 24px}
+.gui-skin .intake .intake-hero h1{font-family:var(--chd-serif);font-size:clamp(24px,3.4vw,34px);font-weight:500;letter-spacing:-.02em;margin:6px 0 8px}
+.gui-skin .intake .intake-hero p{font-size:16px;line-height:1.55;max-width:56ch}
+.gui-skin .intake .chapter-stage{min-height:0;padding:34px 24px 10px;background:none;border-top:1px solid rgba(255,255,255,.14)}
+.gui-skin .intake .chapter-stage h2{font-family:var(--chd-serif);font-size:clamp(24px,3vw,32px);font-weight:500;margin:6px 0 6px;text-shadow:none}
+.gui-skin .intake .chapter-stage p{margin:0 0 8px;font-size:16px}
+.gui-skin .intake .chapter-meta{display:none}
+.gui-skin .intake .chapter-stage .eyebrow{letter-spacing:.2em;font-size:12px}

@@ -15,7 +15,7 @@ export default function ClientPage() {
   const [questions, setQuestions] = useState<QDef[]>([]);
   const [sections, setSections] = useState<SectionDef[]>([]);
   const [brand, setBrand] = useState<Obj | null>(null);
-  const [phase, setPhase] = useState<"loading" | "invalid" | "welcome" | "form" | "thanks">("loading");
+  const [phase, setPhase] = useState<"loading" | "invalid" | "form" | "thanks">("loading");
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [missing, setMissing] = useState<Obj[]>([]);
@@ -52,8 +52,7 @@ export default function ClientPage() {
         ]);
         if (!alive) return;
         setProject(view); setQuestions(qs.questions || []); setSections(qs.sections || []); setBrand(b);
-        const started = view.answers.length > 0 || view.sources.length > 0 || sessionStorage.getItem(`gui-${token}`);
-        setPhase(view.submitted_at ? "thanks" : started ? "form" : "welcome");
+        setPhase(view.submitted_at ? "thanks" : "form");
       } catch {
         if (alive) setPhase("invalid");
       }
@@ -114,28 +113,6 @@ export default function ClientPage() {
 
   if (phase === "loading") return <main className="gui-screen" style={themeVars}><p className="gui-quiet">Đang mở phiếu của anh chị…</p></main>;
   if (phase === "invalid") return <main className="gui-screen" style={themeVars}><div className="gui-card"><span className="gui-eyebrow">{studio.toUpperCase()}</span><h1>Đường link này không dùng được nữa</h1><p>Link có thể đã hết hạn hoặc được thay bằng link mới. Anh chị nhắn cho {studio} để nhận link mới nhé, mọi thứ anh chị đã điền trước đó vẫn còn.</p></div></main>;
-  if (phase === "welcome") return <main className="gui-screen welcome gui-skin" style={themeVars}>
-    <div className="gui-card hero">
-      <span className="gui-eyebrow">01 — XIN CHÀO</span>
-      <h1>Chào anh chị! <em>Mời anh chị kể về video cần làm.</em></h1>
-      <p>Đây là nơi chúng tôi thu thập thông tin để hiểu rõ yêu cầu của anh chị, từ đó đề xuất phương án phù hợp nhất. Anh chị vui lòng phối hợp trả lời giúp các câu hỏi dưới đây.</p>
-      <ol className="gui-pillars">
-        <li><span>01</span><b>Khoảng 5–7 phút</b><small>Bộ câu hỏi rất nhanh</small></li>
-        <li><span>02</span><b>Có sẵn đáp án</b><small>Chỉ cần vài cú nhấp chuột</small></li>
-        <li><span>03</span><b>Tự lưu</b><small>Dừng lúc nào cũng được, quay lại bằng link này</small></li>
-      </ol>
-      <button type="button" className="gui-cta" onClick={() => {sessionStorage.setItem(`gui-${token}`, "1"); setPhase("form");}}>Mời anh chị bắt đầu <span aria-hidden="true">↗</span></button>
-      <div className="gui-process">
-        <span className="gui-eyebrow">02 — SAU KHI ANH CHỊ GỬI</span>
-        <ol>
-          <li><span>01</span><b>Anh chị điền phiếu</b></li>
-          <li><span>02</span><b>{studio} đọc yêu cầu</b></li>
-          <li><span>03</span><b>Gọi lại trao đổi thêm</b></li>
-          <li><span>04</span><b>Gửi báo giá</b></li>
-        </ol>
-      </div>
-    </div>
-  </main>;
   if (phase === "thanks") return <main className="gui-screen gui-skin" style={themeVars}>
     <div className="gui-card">
       <span className="gui-eyebrow">03 — ĐÃ NHẬN</span>
