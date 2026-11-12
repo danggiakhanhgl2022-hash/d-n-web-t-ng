@@ -14,6 +14,8 @@ const STATUS: Record<string, string> = {CONFIRMED: "Đã xác nhận", ANSWERED_
 const CLIENT_PART: Record<string, string> = {"Phần 0": "Mở đầu", "Phần A": "Về video của bạn", "Phần B": "Về bạn và nhu cầu", "Phần C": "Chi tiết theo loại video", "Phần D": "Theo từng cảnh"};
 const PART_NOTE: Record<string, string> = {"Phần 0": "Chọn đường đi", "Phần A": "Câu hỏi lõi", "Phần B": "Theo kiểu khách", "Phần C": "Theo loại video", "Phần D": "Theo cảnh", "Phần E": "Nội bộ"};
 const SAVE_DELAY = 850;
+// Chia phiếu khách thành từng bước (Quay lại / Tiếp tục). Tắt để giữ nguyên trải nghiệm một trang cuộn như bản đầu.
+const WIZARD = false;
 const todayISO = () => {const d = new Date(); return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;};
 const isObj = (v: any): v is Obj => !!v && typeof v === "object" && !Array.isArray(v);
 const strList = (v: any): string[] => Array.isArray(v) ? v.filter((x): x is string => typeof x === "string") : [];
@@ -327,7 +329,7 @@ export default function Intake({project, setProject, questions, sections, api, e
   const parts = visible.reduce<Record<string, SectionDef[]>>((acc, s) => {(acc[s.part] = acc[s.part] || []).push(s); return acc;}, {});
   const go = (id: string) => {
     setActive(id);
-    if (client) {document.getElementById("intake-top")?.scrollIntoView({behavior: "smooth", block: "start"}); return;}
+    if (WIZARD && client) {document.getElementById("intake-top")?.scrollIntoView({behavior: "smooth", block: "start"}); return;}
     document.getElementById(`ch-${id}`)?.scrollIntoView({behavior: "smooth", block: "start"});
   };
   const stepIndex = current ? visible.findIndex(v => v.id === current.id) : 0;
@@ -353,7 +355,7 @@ export default function Intake({project, setProject, questions, sections, api, e
   const card = (q: QDef, i: number) => <QuestionCard key={q.code} q={q} index={i} answer={answers[q.code]} draft={drafts[q.code]} dirty={!!dirty[q.code]} saveState={saveState[q.code]} required={required.has(q.code)} issues={issuesFor(q.code)} notes={notesFor(q.code)} editable={editable} reviewer={reviewer} client={client} attach={attach ? attach(q.code) : undefined}
     onChange={v => change(q.code, v)} onStatus={(status, v) => change(q.code, v, status, 0)} onConfirm={() => confirm([q.code])} />;
 
-  return <div className={`intake${client ? " wizard" : ""}`} style={themeVars} id="intake-top">
+  return <div className={`intake${WIZARD && client ? " wizard" : ""}`} style={themeVars} id="intake-top">
     <section className="intake-hero">
       <div className="scene" aria-hidden="true"><span className="orb o1" /><span className="orb o2" /><span className="orb o3" /><span className="grain" /></div>
       <div className="hero-copy">
@@ -401,7 +403,7 @@ export default function Intake({project, setProject, questions, sections, api, e
 
       <div className="chapters">
         {visible.map((sec, idx) => {
-          if (client && sec.id !== current?.id) return null;
+          if (WIZARD && client && sec.id !== current?.id) return null;
           const qs = questions.filter(q => q.section === sec.id);
           const mainQs = qs.filter(q => required.has(q.code) || q.group !== "A");
           const laterQs = qs.filter(q => !required.has(q.code) && q.group === "A");
@@ -430,8 +432,8 @@ export default function Intake({project, setProject, questions, sections, api, e
                 <button type="button" className="later-toggle" aria-expanded={laterOpen[sec.id] !== false} onClick={() => setLaterOpen(o => ({...o, [sec.id]: o[sec.id] === false}))}><span>{laterOpen[sec.id] !== false ? "−" : "+"}</span>Có thể bổ sung sau · {laterQs.length} câu</button>
                 <Reveal open={laterOpen[sec.id] !== false}><div className="cards">{laterQs.map(card)}</div></Reveal>
               </div>}
-              {client && <div className="wizard-progress" role="progressbar" aria-valuemin={1} aria-valuemax={visible.length} aria-valuenow={idx + 1}><i style={{width: `${Math.round((idx + 1) / visible.length * 100)}%`}} /></div>}
-              {client && <div className="wizard-nav">
+              {WIZARD && client && <div className="wizard-progress" role="progressbar" aria-valuemin={1} aria-valuemax={visible.length} aria-valuenow={idx + 1}><i style={{width: `${Math.round((idx + 1) / visible.length * 100)}%`}} /></div>}
+              {WIZARD && client && <div className="wizard-nav">
                 <button type="button" className="wizard-back" disabled={idx === 0} onClick={() => go(visible[idx - 1].id)}>← Quay lại</button>
                 <span className="wizard-count">Bước {idx + 1} / {visible.length} · Tự động lưu</span>
                 {!isLastStep && <button type="button" className="wizard-next" onClick={() => go(visible[idx + 1].id)}>Tiếp tục →</button>}
@@ -439,7 +441,7 @@ export default function Intake({project, setProject, questions, sections, api, e
             </div>
           </section>;
         })}
-        {client ? (isLastStep ? (finale || null) : null) : <div className="finale">
+        {client ? ((WIZARD && !isLastStep) ? null : (finale || null)) : <div className="finale">
           <span className="eyebrow">Hết phiếu</span>
           <h2>Kiểm tra và gửi duyệt</h2>
           <p>{blockers.length ? `Còn ${blockers.length} việc cần xử lý trước khi gửi.` : "Không còn việc chặn. Có thể gửi duyệt."}</p>
