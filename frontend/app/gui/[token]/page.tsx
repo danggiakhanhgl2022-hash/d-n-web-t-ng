@@ -121,7 +121,6 @@ export default function ClientPage() {
         <li><b>Gửi ảnh, video, ghi âm</b><span>Ngay trong từng câu hỏi</span></li>
       </ul>
       <button type="button" className="gui-start" onClick={() => {sessionStorage.setItem(`gui-${token}`, "1"); setPhase("form");}}>Vâng, tôi muốn làm video →</button>
-      <small>Dự án: {project?.name}</small>
     </div>
   </main>;
   if (phase === "thanks") return <main className="gui-screen" style={themeVars}>
