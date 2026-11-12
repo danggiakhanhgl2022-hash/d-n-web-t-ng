@@ -19,6 +19,7 @@ export default function ClientPage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
   const [missing, setMissing] = useState<Obj[]>([]);
+  const [agree, setAgree] = useState(false);
 
   const api = useCallback(async (path: string, init: RequestInit = {}) => {
     let url: string;
@@ -85,7 +86,7 @@ export default function ClientPage() {
   }, [token]);
 
   const themeVars = useMemo(() => Object.fromEntries(Object.entries(brand?.colors || {}).map(([k, v]) => [`--b-${k.replace(/_/g, "-")}`, v as string])) as React.CSSProperties, [brand]);
-  const studio = brand?.studio_name || "Studio";
+  const studio = "B Productions";
   const label = useCallback((code: string) => questions.find(q => q.code === code)?.label || code, [questions]);
   const limits = project?.limits || {image: 25 * 1048576, audio: 60 * 1048576, video: 200 * 1048576};
   const open = useMemo(() => (project?.validation?.blockers || []).filter((b: Obj) => b.code === "ANSWER_REQUIRED"), [project]);
@@ -113,46 +114,55 @@ export default function ClientPage() {
 
   if (phase === "loading") return <main className="gui-screen" style={themeVars}><p className="gui-quiet">Đang mở phiếu của bạn…</p></main>;
   if (phase === "invalid") return <main className="gui-screen" style={themeVars}><div className="gui-card"><span className="gui-eyebrow">{studio.toUpperCase()}</span><h1>Đường link này không dùng được nữa</h1><p>Link có thể đã hết hạn hoặc được thay bằng link mới. Bạn nhắn cho {studio} để nhận link mới nhé, mọi thứ bạn đã điền trước đó vẫn còn.</p></div></main>;
-  if (phase === "welcome") return <main className="gui-screen welcome" style={themeVars}>
+  if (phase === "welcome") return <main className="gui-screen welcome gui-skin" style={themeVars}>
     <div className="gui-card hero">
-      <span className="gui-eyebrow">{studio.toUpperCase()}</span>
-      <h1>Kể cho mình nghe video bạn cần</h1>
-      <p>Mình hỏi từng chút một, bạn chỉ cần trả lời những gì bạn biết. Chỗ nào chưa chắc cứ bấm “Chưa biết”, mình sẽ tư vấn thêm.</p>
-      <ul className="gui-points">
-        <li><b>Khoảng 5–8 phút</b><span>Phần lớn là bấm chọn</span></li>
-        <li><b>Dừng lúc nào cũng được</b><span>Tự lưu, quay lại bằng link này</span></li>
-        <li><b>Gửi ảnh, video, ghi âm</b><span>Ngay trong từng câu hỏi</span></li>
-      </ul>
-      <button type="button" className="gui-start" onClick={() => {sessionStorage.setItem(`gui-${token}`, "1"); setPhase("form");}}>Bắt đầu</button>
-      <small>Dự án: {project?.name}</small>
+      <span className="gui-eyebrow">01 — XIN CHÀO</span>
+      <h1>Chào anh chị! <em>Mời anh chị kể về video cần làm.</em></h1>
+      <p>Đây là nơi chúng tôi thu thập thông tin để hiểu rõ yêu cầu của anh chị, từ đó đề xuất phương án phù hợp nhất. Anh chị vui lòng phối hợp trả lời giúp các câu hỏi dưới đây.</p>
+      <ol className="gui-pillars">
+        <li><span>01</span><b>Khoảng 5–7 phút</b><small>Bộ câu hỏi rất nhanh</small></li>
+        <li><span>02</span><b>Có sẵn đáp án</b><small>Chỉ cần vài cú nhấp chuột</small></li>
+        <li><span>03</span><b>Tự lưu</b><small>Dừng lúc nào cũng được, quay lại bằng link này</small></li>
+      </ol>
+      <button type="button" className="gui-cta" onClick={() => {sessionStorage.setItem(`gui-${token}`, "1"); setPhase("form");}}>Mời anh chị bắt đầu <span aria-hidden="true">↗</span></button>
+      <div className="gui-process">
+        <span className="gui-eyebrow">02 — SAU KHI ANH CHỊ GỬI</span>
+        <ol>
+          <li><span>01</span><b>Anh chị điền phiếu</b></li>
+          <li><span>02</span><b>{studio} đọc yêu cầu</b></li>
+          <li><span>03</span><b>Gọi lại trao đổi thêm</b></li>
+          <li><span>04</span><b>Gửi báo giá</b></li>
+        </ol>
+      </div>
     </div>
   </main>;
-  if (phase === "thanks") return <main className="gui-screen" style={themeVars}>
+  if (phase === "thanks") return <main className="gui-screen gui-skin" style={themeVars}>
     <div className="gui-card">
-      <span className="gui-eyebrow">{studio.toUpperCase()}</span>
-      <h1>Cảm ơn bạn, {studio} đã nhận được rồi</h1>
-      <p>Mình đã nhận {project?.answers.length || 0} câu trả lời và {files.length} tệp của bạn. Mình sẽ đọc kỹ rồi liên hệ lại qua kênh bạn đã ghi, nếu cần hỏi thêm thì mình hỏi đúng chỗ còn thiếu.</p>
+      <span className="gui-eyebrow">03 — ĐÃ NHẬN</span>
+      <h1>Cảm ơn anh chị! <em>{studio} đã nhận được thông tin.</em></h1>
+      <p>Chúng tôi sẽ liên hệ lại sớm để báo giá và hỗ trợ anh chị. Nếu cần hỏi thêm, chúng tôi chỉ hỏi đúng chỗ còn thiếu.</p>
       <button type="button" className="gui-ghost" onClick={() => setPhase("form")}>Bổ sung thêm thông tin hoặc tệp</button>
     </div>
   </main>;
 
   const finale = <section className="gui-finale" id="gui-finale">
-    <span className="gui-eyebrow">GẦN XONG RỒI</span>
-    <h2>Bạn còn tư liệu nào muốn gửi không?</h2>
-    <p>Logo, ảnh sản phẩm, video mẫu, hoặc ghi âm vài câu bạn muốn nói thêm. Phần này không bắt buộc.</p>
+    <span className="gui-eyebrow">— GỬI YÊU CẦU</span>
+    <h2>Anh chị còn tư liệu nào muốn gửi không?</h2>
+    <p>Logo, ảnh sản phẩm, video mẫu, hoặc ghi âm vài câu anh chị muốn nói thêm. Phần này không bắt buộc.</p>
     <Attach code={null} files={files} limits={limits} upload={upload} remove={remove} label="Thêm tư liệu chung" hint="Tư liệu ở đây áp dụng cho cả video. Tư liệu riêng cho từng câu thì gửi ngay trong câu đó." />
     {open.length > 0
-      ? <div className="gui-todo"><b>Còn {open.length} câu cần trả lời để mình báo giá được:</b><ul>{open.slice(0, 8).map((b: Obj) => <li key={b.question_code}><button type="button" onClick={() => jump(b.question_code)}>{label(b.question_code)}</button></li>)}</ul>{open.length > 8 && <small>và {open.length - 8} câu nữa</small>}</div>
-      : <p className="gui-ready">Bạn đã trả lời đủ phần cần thiết.</p>}
-    {missing.length > 0 && <p className="gui-error" role="alert">Mình chưa gửi được vì còn thiếu câu, bạn bấm vào câu ở trên để điền nhé.</p>}
-    <button type="button" className="gui-start" disabled={busy || open.length > 0} onClick={submit}>{busy ? "Đang gửi…" : `Gửi cho ${studio}`}</button>
-    <small>Gửi rồi vẫn sửa được: bạn mở lại link này bất cứ lúc nào.</small>
+      ? <div className="gui-todo"><b>Còn {open.length} câu cần trả lời để chúng tôi báo giá được:</b><ul>{open.slice(0, 8).map((b: Obj) => <li key={b.question_code}><button type="button" onClick={() => jump(b.question_code)}>{label(b.question_code)}</button></li>)}</ul>{open.length > 8 && <small>và {open.length - 8} câu nữa</small>}</div>
+      : <p className="gui-ready">Anh chị đã trả lời đủ phần cần thiết.</p>}
+    {missing.length > 0 && <p className="gui-error" role="alert">Chưa gửi được vì còn thiếu câu, anh chị bấm vào câu ở trên để điền nhé.</p>}
+    <label className="gui-consent"><input type="checkbox" checked={agree} onChange={e => setAgree(e.target.checked)} /><span>Tôi đồng ý để {studio} liên hệ lại theo thông tin tôi đã điền.</span></label>
+    <button type="button" className="gui-submit" disabled={busy || open.length > 0 || !agree} onClick={submit}>{busy ? "ĐANG GỬI…" : "GỬI YÊU CẦU"} <span aria-hidden="true">↗</span></button>
+    <small>Gửi rồi vẫn sửa được: anh chị mở lại link này bất cứ lúc nào.</small>
   </section>;
 
-  return <>
+  return <div className="gui-skin">
     {error && <div className="gui-banner" role="alert">{error}<button type="button" onClick={() => setError("")}>Đóng</button></div>}
     {project && <Intake client editable reviewer={false} project={project} setProject={p => setProject(p)} questions={questions} sections={sections} api={api} onReview={() => document.getElementById("gui-finale")?.scrollIntoView({behavior: "smooth"})} onError={setError}
       attach={code => ATTACH_HINT[code] ? <Attach code={code} files={files} limits={limits} upload={upload} remove={remove} hint={ATTACH_HINT[code]} /> : null}
       finale={finale} />}
-  </>;
+  </div>;
 }

@@ -37,12 +37,13 @@ export default function ClientStart() {
 
   if (state === "check") return <main className="gui-screen"><div className="gui-card"><p>Đang mở…</p></div></main>;
   return (
-    <main className="gui-screen">
+    <main className="gui-screen gui-skin">
       <div className="gui-card gui-start">
-        <h1>Kể cho mình nghe video bạn cần</h1>
-        <p>Trả lời vài câu hỏi, gửi kèm ảnh, video hoặc ghi âm nếu có. Không cần tạo tài khoản, và bạn có thể dừng rồi quay lại tiếp bất cứ lúc nào.</p>
+        <span className="gui-eyebrow">01 — XIN CHÀO</span>
+        <h1>Chào anh chị! <em>Mời anh chị kể về video cần làm.</em></h1>
+        <p>Bộ câu hỏi rất nhanh, khoảng 5–7 phút, mỗi câu đã có sẵn đáp án. Không cần tạo tài khoản, anh chị có thể dừng rồi quay lại tiếp bất cứ lúc nào.</p>
         {error && <p role="alert">{error}</p>}
-        <button className="btn" disabled={state === "busy"} onClick={start}>{state === "busy" ? "Đang mở phiếu…" : "Bắt đầu"}</button>
+        <button className="gui-cta" disabled={state === "busy"} onClick={start}>{state === "busy" ? "Đang mở phiếu…" : "Mời anh chị bắt đầu"} <span aria-hidden="true">↗</span></button>
       </div>
     </main>
   );

@@ -128,3 +128,37 @@
 .gui-screen .intake .ghost-chip{color:var(--g-ink);background:#fffdf4;border:1px dashed #6b6f60;font-size:15px;opacity:1}
 .gui-screen .intake .ghost-chip.on{background:var(--g-ink);color:var(--g-cream);border-style:solid}
 .gui-screen .intake .q-card small,.gui-screen .intake .q-card .q-help{color:#4a4f43}
+
+/* ===== Kiểu trình bày theo trang CHD: nhãn đánh số "01 —", tiêu đề serif có chữ nghiêng, thẻ lựa chọn đánh số, nút viên thuốc có mũi tên ↗ ===== */
+.gui-skin{--chd-ink:#090d0e;--chd-serif:var(--font-editorial,"Lora",Georgia,serif)}
+.gui-skin .gui-screen,.gui-screen.gui-skin{background:var(--chd-ink)}
+.gui-skin .gui-card{border-radius:6px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);backdrop-filter:none}
+.gui-skin .gui-card h1,.gui-skin .gui-finale h2{font-family:var(--chd-serif);font-weight:500;letter-spacing:-.02em}
+.gui-skin .gui-card h1 em{display:block;font-style:italic;font-weight:400;color:rgba(246,243,238,.78)}
+.gui-skin .gui-eyebrow{font-size:12px;letter-spacing:.2em;color:rgba(246,243,238,.62);font-weight:600}
+.gui-pillars{list-style:none;margin:26px 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:1px solid rgba(255,255,255,.16)}
+.gui-pillars li{display:grid;gap:4px;padding:16px 14px 4px 0;align-content:start}
+.gui-pillars li+li{padding-left:16px;border-left:1px solid rgba(255,255,255,.12)}
+.gui-pillars span,.gui-process li span{font-size:12px;letter-spacing:.14em;color:var(--b-primary,#E4572E);font-weight:700}
+.gui-pillars b{font-size:18px}.gui-pillars small{margin:0!important;font-size:14px;line-height:1.45}
+.gui-cta{appearance:none;border:0;cursor:pointer;display:inline-flex;align-items:center;gap:10px;padding:16px 28px;border-radius:999px;background:#F6F3EE;color:var(--chd-ink);font:700 17px/1 inherit;font-family:inherit;transition:transform .2s,background .2s}
+.gui-cta:hover:not(:disabled){transform:translateY(-2px);background:#fff}
+.gui-cta:disabled{opacity:.5;cursor:not-allowed}
+.gui-process{margin-top:34px;padding-top:20px;border-top:1px solid rgba(255,255,255,.14)}
+.gui-process ol{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.gui-process li{display:grid;gap:4px;align-content:start}.gui-process b{font-size:15px;line-height:1.35}
+@media (max-width:640px){.gui-pillars{grid-template-columns:1fr}.gui-pillars li+li{padding-left:0;border-left:0;border-top:1px solid rgba(255,255,255,.12);margin-top:10px}.gui-process ol{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* câu trả lời dạng thẻ đánh số 01, 02, 03 (chỉ trên trang khách) */
+.gui-skin .chips{counter-reset:opt;display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.gui-skin .chip{counter-increment:opt;display:flex;align-items:center;gap:10px;text-align:left;border-radius:6px;padding:14px 16px;min-height:56px}
+.gui-skin .chip::before{content:counter(opt,decimal-leading-zero);font-size:12px;letter-spacing:.14em;font-weight:700;opacity:.55;flex:0 0 auto}
+.gui-skin .chip.on::before{opacity:1}
+.gui-skin .q-title h3{font-family:var(--chd-serif);font-weight:500}
+
+/* màn cuối: đồng ý được liên hệ + nút gửi rộng, chữ hoa, có ↗ */
+.gui-consent{display:flex;gap:12px;align-items:flex-start;font-size:16px;line-height:1.5;color:rgba(246,243,238,.85);cursor:pointer}
+.gui-consent input{width:20px;height:20px;min-height:0;margin-top:2px;flex:0 0 auto;accent-color:var(--b-primary,#E4572E)}
+.gui-finale .gui-submit{appearance:none;border:0;width:100%;cursor:pointer;padding:18px 24px;border-radius:4px;background:#F6F3EE;color:var(--chd-ink);font:700 16px/1 inherit;font-family:inherit;letter-spacing:.14em;display:flex;justify-content:center;gap:10px}
+.gui-finale .gui-submit:disabled{opacity:.4;cursor:not-allowed}
+.gui-finale .gui-eyebrow{color:rgba(246,243,238,.62)}
