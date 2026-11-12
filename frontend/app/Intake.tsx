@@ -430,9 +430,10 @@ export default function Intake({project, setProject, questions, sections, api, e
                 <button type="button" className="later-toggle" aria-expanded={laterOpen[sec.id] !== false} onClick={() => setLaterOpen(o => ({...o, [sec.id]: o[sec.id] === false}))}><span>{laterOpen[sec.id] !== false ? "−" : "+"}</span>Có thể bổ sung sau · {laterQs.length} câu</button>
                 <Reveal open={laterOpen[sec.id] !== false}><div className="cards">{laterQs.map(card)}</div></Reveal>
               </div>}
+              {client && <div className="wizard-progress" role="progressbar" aria-valuemin={1} aria-valuemax={visible.length} aria-valuenow={idx + 1}><i style={{width: `${Math.round((idx + 1) / visible.length * 100)}%`}} /></div>}
               {client && <div className="wizard-nav">
                 <button type="button" className="wizard-back" disabled={idx === 0} onClick={() => go(visible[idx - 1].id)}>← Quay lại</button>
-                <span className="wizard-count">Bước {idx + 1} / {visible.length}</span>
+                <span className="wizard-count">Bước {idx + 1} / {visible.length} · Tự động lưu</span>
                 {!isLastStep && <button type="button" className="wizard-next" onClick={() => go(visible[idx + 1].id)}>Tiếp tục →</button>}
               </div>}
             </div>
