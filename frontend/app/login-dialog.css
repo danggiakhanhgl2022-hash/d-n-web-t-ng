@@ -1,0 +1,27 @@
+/* One final visual layer for the rebuilt public entrance and workspace. */
+.login-shell .cinema-opening .cinema-copy{pointer-events:none;display:grid;place-items:center}
+.login-shell .cinema-cover{width:250px;min-height:380px;padding:20px 18px;background:transparent;backdrop-filter:none;pointer-events:auto;box-shadow:none;border:1px solid #fff8e96b}
+.login-shell .cinema-cover h1{font:700 28px/.98 var(--font-ui);letter-spacing:-.04em;margin:0 0 55px;color:#fff8e9}
+.login-shell .cinema-cover h1 em{font:inherit}
+.login-shell .cinema-cover p{font:15px/1.35 var(--font-ui);letter-spacing:0;margin:0 0 20px;max-width:20ch}
+.login-shell .cinema-cover-list button{font:400 15px/1.25 var(--font-ui);letter-spacing:0;min-height:24px;padding:2px 0}
+.login-shell .cinema-cover-list button span{font:12px var(--font-ui);opacity:.7}
+.login-shell .renaissance-cinema[data-chapter="0"]>.cinema-index{display:none}
+.cinema-login-dialog{position:fixed;inset:0;width:440px;max-width:calc(100vw - 32px);height:auto!important;max-height:calc(100svh - 40px);margin:auto;padding:0;overflow:auto;border:1px solid #d5d0be;border-radius:2px;background:#f3eee1;color:#24271f;z-index:100;box-sizing:border-box}
+.cinema-login-dialog::backdrop{background:#081108b8;backdrop-filter:blur(8px)}
+@media(prefers-reduced-motion:no-preference){
+ .cinema-login-dialog[open]{animation:login-appear .45s ease-out both}
+ @keyframes login-appear{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+}
+.cinema-login-dialog .login-panel{width:100%;max-width:none;margin:0;padding:46px 32px 30px;background:#f3eee1;border:0;box-shadow:none;backdrop-filter:none;color:#24271f;opacity:1!important;visibility:visible!important;transform:none!important;pointer-events:auto!important}
+.cinema-login-dialog .login-box h2{font:600 30px/1.15 var(--font-ui);color:#24271f}
+.cinema-login-dialog .login-box .eyebrow,.cinema-login-dialog .login-box>.muted,.cinema-login-dialog .login-box label,.cinema-login-dialog .login-note{color:#505447}
+.cinema-login-dialog .login-box input{background:#fffdf7;border-color:#babaaa;font-size:16px}
+.login-shell .renaissance-cinema .cinema-login-dialog{height:fit-content!important;min-height:0;max-height:calc(100svh - 40px)}
+.login-shell .renaissance-cinema .cinema-login-dialog .login-panel{display:block;min-height:0;height:auto;width:100%;padding:46px 32px 30px;background:#f3eee1;color:#24271f}
+.login-shell .cinema-login-dialog .login-box{max-width:none}
+.login-shell .cinema-login-dialog .mini-icon{display:none}
+.login-shell .cinema-login-dialog .login-box .eyebrow,.login-shell .cinema-login-dialog .login-box>.muted,.login-shell .cinema-login-dialog .login-box .field>span,.login-shell .cinema-login-dialog .login-note{color:#505447}
+.login-shell .cinema-login-dialog .login-box h2{color:#24271f;margin:12px 0 14px}
+.login-shell .cinema-login-dialog .btn{width:100%;background:#263820;border-color:#263820;color:#fff9e9;font-size:16px}
+.cinema-dialog-close{position:absolute;right:12px;top:8px;z-index:2;border:0;background:transparent;color:#30382b;width:36px;height:36px;font:28px/1 var(--font-ui)}

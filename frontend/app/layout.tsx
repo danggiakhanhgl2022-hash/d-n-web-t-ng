@@ -1,0 +1,20 @@
+import type { Metadata } from "next";
+import "./globals.css";
+import "./readability.css";
+import "./renaissance.css";
+import "./motion.css";
+import "./cinema.css";
+import "./entry.css";
+import "./intake.css";
+import "./intake-workspace.css";
+import "./reference-layout.css";
+import "./website-motion.css";
+import "./login-dialog.css";
+import "./gui.css";
+import "./clarity.css";
+import "./reference-skin.css";
+import ReferenceFx from "./ReferenceFx";
+import AutoSlide from "./AutoSlide";
+import PerfProbe from "./PerfProbe";
+export const metadata: Metadata = {title: "Video OS · Tiếp nhận & thông tin", description: "Không gian làm việc chặng A: câu hỏi, chứng cứ, review và duyệt Folder Thông Tin."};
+export default function RootLayout({children}: Readonly<{children: React.ReactNode}>) {return <html lang="vi"><body>{children}<ReferenceFx /><AutoSlide /><PerfProbe /></body></html>;}

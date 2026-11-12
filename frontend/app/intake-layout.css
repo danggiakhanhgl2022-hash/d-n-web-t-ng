@@ -1,0 +1,101 @@
+/* Intake layout: an illustrated chapter, followed by a separate cream reading surface.
+   Keep the responsive rules together: the previous desktop rule followed and
+   overrode its own narrow-screen grid, squeezing the chapter beside a scroller. */
+.app-shell[data-view=questions] .main-content{max-width:1600px;padding:28px 32px 48px;min-width:0}
+.app-shell[data-view=questions] .workspace{min-width:0}
+.app-shell[data-view=questions] .project-heading{margin-bottom:16px}
+.app-shell[data-view=questions] .project-heading h1{font-size:clamp(28px,3vw,42px)}
+.app-shell[data-view=questions] .project-tabs{margin:0 0 24px}
+.app-shell .intake{--primary:#ff43af;--primary-ink:#211821;--paper:#f5f0e4;--ink:#24251f;--surface:#fffdf5;--line:#d9d3c5;--muted:#646458;background:#171912;border-radius:0;padding:0;box-shadow:none;overflow:visible;isolation:isolate;min-width:0}
+.intake .intake-hero{min-height:0;padding:26px 28px;display:flex;align-items:center;justify-content:space-between;gap:24px;border-radius:0;background:#25291f;border:1px solid #f5f0e426;overflow:hidden}
+.intake .intake-hero>.scene{display:none}
+.intake .hero-copy{min-width:0;flex:1}
+.app-shell .intake .hero-copy h1{display:none}
+.intake .hero-copy>.eyebrow{color:#f5f0e4;letter-spacing:.06em;font-size:12px}
+.intake .hero-copy>p{color:#dbd7cb;font-size:15px;animation:none}
+.intake .branch-chips:empty{display:none}
+.intake .hero-stats{margin:0;padding:12px 18px;gap:22px;border-radius:0;box-shadow:none;background:transparent;border:0;border-left:1px solid #f5f0e433;animation:none;flex-shrink:0}
+.intake .hero-stats dl{gap:18px}
+.intake .hero-stats .ring-box{display:none}
+.intake .hero-stats dt{font-size:12px;color:#cfcdbe}
+.intake .hero-stats dd{font-size:25px;color:#f5f0e4}
+.intake .intake-body{display:grid;grid-template-columns:170px minmax(0,1fr);align-items:start;gap:26px;padding:0;margin:28px 0 0;min-width:0}
+.intake .rail{position:sticky;top:20px;display:grid;gap:18px;max-height:calc(100svh - 40px);overflow-y:auto;overflow-x:hidden;padding:8px 0;min-width:0;scrollbar-width:thin}
+.intake .rail-part{display:grid;gap:3px;min-width:0}
+.intake .rail-part-name{display:block;padding:0 8px 8px;color:#ddd8c8;font-size:11px;letter-spacing:.08em}
+.intake .rail-part-name small{display:block;margin-top:3px;font-size:12px;color:#abae9e}
+.intake .rail-item{display:grid!important;grid-template-columns:24px minmax(0,1fr);gap:9px;min-width:0;width:100%;white-space:normal;padding:10px 8px!important;border-radius:0;color:#bbbfb0}
+.intake .rail-text{display:grid!important;min-width:0}
+.app-shell .intake .rail-text b{display:block;font-size:14px;line-height:1.35;font-weight:400;white-space:normal;overflow:visible;text-overflow:clip}
+.intake .rail-bar{display:none}
+.intake .rail-item.active{color:#fff9eb;background:#fff9eb0b;box-shadow:none}
+.intake .rail-item.active .rail-text b{font-weight:700}
+.intake .rail-item .new-badge{grid-column:2;justify-self:start}
+.intake .rail-dot{width:24px;height:24px;border:1px solid #f5f0e447;border-radius:50%;background:transparent}
+.intake .rail-item.active .rail-dot{background:#ff43af;border-color:#ff43af;color:#211821}
+.intake .chapters,.intake .chapter-block{min-width:0;width:100%}
+.intake .chapter-block{padding-bottom:44px;scroll-margin-top:24px}
+.intake .chapter-stage{--chapter-image:url('/renaissance/hero.jpg');position:relative;top:auto;height:auto;min-height:340px;display:flex;align-items:end;padding:40px 34px;border:0;border-radius:0;background:linear-gradient(0deg,#0a100ce8, #0a100c08 90%),var(--chapter-image) center 40%/cover;overflow:hidden}
+.intake .part-A .chapter-stage{--chapter-image:url('/renaissance/assistant.jpg')}
+.intake .part-B .chapter-stage{--chapter-image:url('/renaissance/gallery.jpg')}
+.intake .part-C .chapter-stage{--chapter-image:url('/renaissance/studio.jpg')}
+.intake .part-D .chapter-stage{--chapter-image:url('/renaissance/workshop.jpg')}
+.intake .part-E .chapter-stage{--chapter-image:url('/renaissance/delivery.jpg')}
+.intake .chapter-stage>.scene,.intake .chapter-no,.intake .scroll-cue{display:none}
+.intake .chapter-copy{max-width:760px;min-width:0}
+.app-shell .intake .chapter-stage h2{font-family:var(--font-ui);font-size:clamp(38px,4.8vw,68px);line-height:1.06;font-weight:400;letter-spacing:-.035em;color:#fff9ea;margin:12px 0 14px;overflow-wrap:anywhere}
+.intake .chapter-stage .eyebrow{color:#f5e9d6;font-size:12px;letter-spacing:.08em}
+.intake .chapter-stage p{font-family:var(--font-editorial);font-size:20px;line-height:1.5;color:#eee9d9;max-width:44ch}
+.intake .chapter-meta{margin-top:18px;color:#ede9d8}
+.intake .chapter-meta>span:first-child{border-radius:2px;font-size:13px;background:#17191266}
+.intake .chapter-content{position:relative;margin:0;padding:28px;background:#f5f0e4;color:#24251f;z-index:auto}
+.intake .chapter-tools{margin-bottom:18px}
+.intake .cards{gap:0}
+.intake .q-card{border:0;border-bottom:1px solid #d9d3c5;background:transparent;border-radius:0;padding:26px 0;margin:0;box-shadow:none;animation:none;transform:none}
+.intake .q-card:first-child{padding-top:4px}
+.intake .q-card:last-child{border-bottom:0}
+.intake .q-card:before{display:none}
+.intake .q-head{grid-template-columns:auto minmax(0,1fr);gap:10px 14px}
+.intake .q-status{grid-column:2;justify-self:start;margin:0}
+.app-shell .intake .q-card h3{font-size:21px;line-height:1.5;font-weight:700}
+.intake .q-code{border-radius:2px;min-width:40px;line-height:1.6}
+.intake .q-body,.intake .q-issues,.intake .q-foot{margin-left:54px;min-width:0}
+.intake .q-card .chip{border-radius:2px;background:#fffdf5!important;text-align:left}
+.intake .q-card .chip.on{background:#fbe5ef!important;border-color:#8f3564!important}
+.intake .later-toggle{color:#44473b!important}
+.intake .finale{padding:32px 20px 56px}
+@media(max-width:1200px){
+ .intake .intake-body{grid-template-columns:minmax(0,1fr);gap:20px}
+ .intake .rail{position:relative;top:auto;display:flex;flex-wrap:wrap;gap:8px;max-height:none;overflow:visible;padding:0}
+ .intake .rail-part{display:contents}
+ .intake .rail-part-name{display:none}
+ .intake .rail-item{display:flex!important;width:auto;max-width:100%;flex:0 1 auto;gap:8px;border:1px solid #f5f0e42e;padding:8px 12px!important}
+ .intake .rail-item:before{display:none}
+ .intake .rail-text b{white-space:normal}
+ .intake .rail-item .new-badge{display:none}
+ .intake .chapter-stage{min-height:310px}
+ .intake .hero-stats{gap:12px;padding-right:0}
+}
+@media(max-width:900px){
+ .app-shell[data-view=questions] .main-content{padding:24px 20px 40px}
+ .intake .intake-hero{padding:20px;flex-wrap:wrap}
+ .intake .hero-stats{width:100%;border-left:0;border-top:1px solid #f5f0e433;padding:16px 0 0}
+ .intake .hero-stats dl{display:flex;flex-wrap:wrap;gap:18px 28px}
+}
+@media(max-width:760px){
+ .app-shell[data-view=questions] .main-content{padding:20px 14px 32px}
+ .app-shell[data-view=questions] .project-heading>.actions{justify-content:flex-start;flex-wrap:wrap}
+ .intake .intake-hero{padding:18px}
+ .intake .hero-stats{flex-direction:row}
+ .intake .rail-item{padding:8px!important;font-size:13px}
+ .app-shell .intake .rail-text b{font-size:13px}
+ .intake .rail-dot{width:21px;height:21px;flex-shrink:0}
+ .intake .chapter-stage{min-height:280px;padding:28px 22px;background-position:center}
+ .app-shell .intake .chapter-stage h2{font-size:40px}
+ .intake .chapter-stage p{font-size:18px}
+ .intake .chapter-content{padding:22px 18px}
+ .intake .q-body,.intake .q-issues,.intake .q-foot{margin-left:0}
+ .app-shell .intake .q-card h3{font-size:20px}
+ .intake .q-head{gap:10px}
+ .intake .q-status{grid-column:2}
+}

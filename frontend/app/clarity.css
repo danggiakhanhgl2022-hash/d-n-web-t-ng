@@ -1,0 +1,126 @@
+/* Chữ rõ ngay từ đầu, cả trang khách lẫn trang nhân viên. Nạp cuối cùng nên thắng các lớp trước. */
+.intake .q-card :is(.field-label,h3,legend){color:#25291f!important;opacity:1!important}
+.intake .q-card :is(small,.small,.muted,.q-help,.optional,.field-label .optional){color:#4a4f43!important;opacity:1!important}
+.intake .q-card .q-status{color:#3b4034!important}
+.intake .ghost-chip{color:#2c3025!important;background:#fffdf4!important;border:1px dashed #6b6f60!important;font-size:15px;opacity:1!important}
+.intake .ghost-chip.on{background:#25291f!important;color:#fff8e9!important;border-style:solid!important}
+.intake .chip{color:#25291f}
+.intake .rail-part-name small{color:#e9e3d2!important}
+.intake .rail-text small{color:#d9d3c2!important}
+.intake .chapter-stage :is(.eyebrow,p),.intake .intake-hero .eyebrow,.gui-screen .intake .eyebrow{color:#fff8e9!important}
+.intake .chapter-stage h2{color:#fff8e9!important;text-shadow:0 2px 24px #0006}
+.intake .q-card .other-input{display:block;width:100%;margin-top:12px;padding:12px 14px;border:1px solid #b9b5a4;border-radius:3px;background:#fffdf4;color:#25291f;font-size:17px}
+.intake .q-card .other-input::placeholder{color:#62656c;opacity:1}
+.intake .q-card .other-input:focus{outline:2px solid #25291f;outline-offset:1px}
+/* Nhãn con trong thẻ (Khung hình, Mức linh hoạt, tiêu đề cột…) từng bị lấy màu kem của nền tối */
+.intake .q-card :is(label,legend,th,.field > span:first-child){color:#25291f!important;opacity:1!important}
+.intake .q-card :is(td,.cell-label,.row-label){color:#25291f}
+
+/* Ô gõ ý riêng và phần đính kèm: gọn, một hàng, không thành khối lớn */
+.intake .q-card .other-input{margin-top:2px;padding:9px 13px;font-size:16px;border-radius:3px}
+.intake .attach{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;margin:2px 0 0;padding:0;border:0;border-radius:3px;background:none;color:#25291f}
+.intake .attach.drag{outline:2px dashed #25291f;outline-offset:6px;background:#ebe8dc}
+.intake .attach-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.intake .attach-btn{min-height:38px;padding:0 14px;gap:7px;border:1px solid #b9b5a4;border-radius:3px;background:#fffdf4;color:#25291f;font:400 15px/1.2 var(--font-ui,Carlito,"Segoe UI",Arial,sans-serif)}
+.intake .attach-btn:hover{border-color:#25291f;background:#fff}
+.intake .attach-btn.rec.on{border-color:#b3261e;color:#b3261e;background:#fff3f1}
+.intake .attach-hint{flex:1 1 220px;margin:0;font-size:14px;line-height:1.45;color:#4a4f43}
+.intake .attach-list{flex:1 1 100%;margin:4px 0 0}
+.intake .attach-list li{border:1px solid #cfcab8;border-radius:3px;background:#fffdf4;color:#25291f;padding:8px 12px}
+.intake .attach-list small{color:#4a4f43}
+.intake .attach-x{color:#8f2f10}
+.intake .q-body{gap:10px}
+@media(max-width:760px){.intake .attach-btn{flex:1 1 100%;justify-content:center}}
+
+/* Đồng nhất bố cục trong thẻ câu hỏi: một kiểu nhãn, một nhịp khoảng cách, một kiểu góc */
+.intake .q-card .q-body{display:grid;gap:22px}
+.intake .q-card .field{display:grid;gap:10px;margin:0}
+.intake .q-card :is(.field-label,.field>span:first-child,.field>label:first-child){display:block;margin:0;font-size:15px!important;font-weight:700!important;line-height:1.4;letter-spacing:0;color:#25291f!important}
+.intake .q-card .field-label .optional{font-size:14px;font-weight:400;color:#4a4f43!important}
+.intake .q-card :is(input:not([type=checkbox]):not([type=radio]),textarea,select){border:1px solid #b9b5a4;border-radius:4px;padding:11px 14px;min-height:46px;background:#fffdf4}
+.intake .q-card :is(input,textarea,select):focus{outline:2px solid #25291f;outline-offset:1px}
+.intake .q-card .chip{border-radius:4px;min-height:44px}
+.intake .q-card .chips,.intake .q-card .chip-row{gap:10px}
+.intake .q-card .ghost-chip{border-radius:4px}
+.intake .q-card .q-foot{margin-top:6px}
+
+/* Gọn để nhìn trọn một câu trong một màn hình: bớt khoảng trống, ô ngắn xếp hai cột */
+.intake .q-card .q-body{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 18px;margin-top:10px}
+.intake .q-card .q-body>*{grid-column:1/-1}
+.intake .q-card .q-body>.field:not(:has(.chips,textarea,.matrix,table,.scene-table,.row-list)){grid-column:auto}
+.intake .q-card .field{gap:6px}
+.intake .q-card textarea{min-height:64px;height:64px;resize:vertical}
+.intake .q-card :is(input:not([type=checkbox]):not([type=radio]),select){min-height:42px;padding:8px 13px}
+.intake .q-card .chip{min-height:40px;padding-top:4px;padding-bottom:4px}
+.intake .q-card .other-input{min-height:40px;padding:8px 13px}
+.intake .q-card .q-foot{margin-top:2px}
+.intake .q-card .q-help{margin-top:2px}
+@media(max-width:860px){.intake .q-card .q-body{grid-template-columns:minmax(0,1fr)}.intake .q-card .q-body>.field:not(:has(.chips,textarea)){grid-column:1/-1}}
+
+/* ===== Làm mềm: bớt cứng và thô, giữ nguyên bố cục ===== */
+.intake .q-card{border-radius:20px;box-shadow:0 1px 2px #1c1f1740,0 14px 40px -18px #1c1f1766}
+.intake .q-card :is(input:not([type=checkbox]):not([type=radio]),textarea,select){border:1px solid #d9d4c1;border-radius:12px;background:#fffefa;box-shadow:inset 0 1px 2px #1c1f170d;transition:border-color .2s,box-shadow .2s,background .2s}
+.intake .q-card :is(input,textarea,select):hover{border-color:#bdb7a1}
+.intake .q-card :is(input,textarea,select):focus{outline:none;border-color:#3c4a2f;box-shadow:0 0 0 4px #3c4a2f1f;background:#fff}
+.intake .q-card :is(input,textarea)::placeholder{color:#8a8c82;opacity:1}
+.intake .q-card .chip{border-radius:999px;border:1px solid #d9d4c1;background:#fffefa;padding-left:12px;padding-right:18px;box-shadow:0 1px 1px #1c1f170a;transition:border-color .2s,background .2s,box-shadow .2s,transform .15s}
+.intake .q-card .chip:hover:not(:disabled){border-color:#8f9a7d;box-shadow:0 3px 10px -4px #1c1f1740;transform:translateY(-1px)}
+.intake .q-card .chip.on{background:#eef2e6;border-color:#52683e;box-shadow:0 0 0 3px #52683e1f}
+.intake .q-card .chip:focus-visible{outline:none;box-shadow:0 0 0 4px #3c4a2f33}
+.intake .q-card .chip-box{border-radius:50%}
+.intake .q-card :is(.field-label,.field>span:first-child,.field>label:first-child){font-size:15.5px!important;letter-spacing:.005em}
+.intake .attach-btn{border-radius:999px;border:1px solid #d9d4c1;background:#fffefa;box-shadow:0 1px 1px #1c1f170a;transition:border-color .2s,box-shadow .2s,transform .15s}
+.intake .attach-btn:hover{border-color:#8f9a7d;background:#fff;box-shadow:0 3px 10px -4px #1c1f1740;transform:translateY(-1px)}
+.intake .attach.drag{outline:2px dashed #52683e;outline-offset:6px;border-radius:14px;background:#eef2e6}
+.intake .attach-list li{border-radius:12px;border:1px solid #e0dccb;background:#fffefa}
+.intake .q-card .ghost-chip{border-radius:999px;border:1px dashed #a9a58f!important;background:transparent!important;color:#4a4f43!important;transition:background .2s,border-color .2s}
+.intake .q-card .ghost-chip:hover{background:#f0ede2!important;border-color:#6b6f60!important}
+.intake .q-card .ghost-chip.on{background:#25291f!important;color:#fff8e9!important;border-style:solid!important}
+.intake .q-card .q-status{border-radius:999px}
+.intake .q-card .other-input{border-radius:12px}
+
+/* Khung đăng nhập gọn: không cần cuộn, không chiếm chỗ */
+.cinema-login-dialog{width:280px!important;max-width:calc(100vw - 24px)!important;max-height:calc(100dvh - 24px)!important;overflow-x:hidden!important;overflow-y:auto!important}
+.cinema-login-dialog::backdrop{background:rgba(8,17,8,.18);backdrop-filter:none}
+.cinema-login-dialog .login-panel,.login-shell .renaissance-cinema .cinema-login-dialog .login-panel{padding:22px 18px 16px!important}
+.cinema-login-dialog .login-box h2,.login-shell .cinema-login-dialog .login-box h2{font-size:20px!important;margin:6px 0 6px!important}
+.cinema-login-dialog .login-box>.muted{margin:0 0 10px!important;font-size:14px!important}
+.cinema-login-dialog .login-box .eyebrow{max-width:calc(100% - 24px);font-size:10px!important;letter-spacing:.1em}
+.cinema-login-dialog .login-box .field{margin:9px 0;gap:4px}
+.cinema-login-dialog .login-box :is(.field-label,label>span,.field>span){font-size:14px!important;margin-bottom:4px}
+.cinema-login-dialog .login-box input{min-height:42px!important;padding:8px 12px!important;border-radius:10px!important;font-size:15px!important}
+.cinema-login-dialog .login-box .btn{min-height:44px!important;padding:0 16px!important;border-radius:999px!important;font-size:15px!important;margin-top:4px}
+.cinema-login-dialog .login-note{margin:10px 0 0!important;font-size:12px!important}
+@media(max-height:640px){.cinema-login-dialog .login-panel{padding:20px 18px 14px!important}}
+
+/* Mẫu đăng nhập nền tối, giữ nguyên kích thước gọn và ảnh nền rõ. */
+.login-shell .renaissance-cinema .cinema-login-dialog{background:#101711;border-color:#e3e0d3;color:#fff9ed}
+.login-shell .renaissance-cinema .cinema-login-dialog .login-panel{background:#101711;color:#fff9ed;padding-top:32px!important}
+.login-shell .cinema-login-dialog .login-box h2{color:#fff9ed}
+.login-shell .cinema-login-dialog .login-box .eyebrow,.login-shell .cinema-login-dialog .login-box>.muted,.login-shell .cinema-login-dialog .login-box .field>span,.login-shell .cinema-login-dialog .login-note{color:#e2dfd3}
+.login-shell .cinema-login-dialog .login-box input{background:#24303b;border-color:#aaa89a;color:#fff9ed;border-radius:3px!important}
+.login-shell .cinema-login-dialog .login-box input::placeholder{color:#d0d5d5}
+.login-shell .cinema-login-dialog .login-box input:-webkit-autofill{-webkit-text-fill-color:#fff9ed;box-shadow:0 0 0 100px #24303b inset}
+.login-shell .cinema-login-dialog .btn{background:#f33eaa;border-color:#f33eaa;color:#17110f;border-radius:3px!important}
+.login-shell .cinema-login-dialog .btn:hover:not(:disabled){background:#ff68bd;border-color:#ff68bd}
+.login-shell .cinema-dialog-close{left:8px;right:auto;top:6px;color:#fff9ed}
+
+/* Thẻ bìa trang đầu: thu nhỏ để cả danh sách nằm gọn trong khung, không tràn ra ngoài */
+.login-shell .cinema-cover,.cinema-cover{box-sizing:border-box!important;width:min(290px,84vw)!important;min-height:0!important;max-height:calc(100svh - 110px)!important;padding:16px 16px 12px!important;overflow:hidden!important;display:flex!important;flex-direction:column!important;gap:0!important}
+.login-shell .cinema-cover h1,.cinema-cover h1,.app-shell .cinema-cover h1{font-size:clamp(22px,4.2svh,30px)!important;line-height:.95!important;margin:0 0 clamp(10px,3svh,28px)!important}
+.login-shell .cinema-cover p,.cinema-cover p{font-size:clamp(14px,2.4svh,17px)!important;line-height:1.15!important;margin:0 0 clamp(8px,2svh,16px)!important}
+.login-shell .cinema-cover-list,.cinema-cover-list{display:grid!important;gap:0!important;min-height:0}
+.login-shell .cinema-cover-list button,.cinema-cover-list button{font-size:clamp(13px,2.2svh,15px)!important;min-height:0!important;line-height:1.5!important;padding:1px 0!important}
+.cinema-cover-list button span{font-size:12px!important}
+@media(max-width:760px){.login-shell .cinema-cover,.cinema-cover{width:min(250px,80vw)!important}}
+
+/* Danh sách dự án: nền kem dịu và thao tác xóa cạnh nút mở. */
+.app-shell .projects-panel{background:#e6e1d4;border-color:#c4bfaf;color:#293025}
+.app-shell .projects-panel .panel-heading{background:#e1dccf;border-color:#c4bfaf}
+.app-shell .projects-panel thead th{background:#d9d4c6;color:#384334;border-color:#c4bfaf}
+.app-shell .projects-panel tbody td{background:transparent;color:#293025;border-color:#c4bfaf}
+.project-row-actions{display:flex;align-items:center;justify-content:flex-end;gap:10px;white-space:nowrap}
+.app-shell .projects-panel .delete-project{border:1px solid #8d796d;border-radius:4px;padding:6px 10px;background:transparent;color:#713a2c;font:inherit;font-size:14px;cursor:pointer}
+.app-shell .projects-panel .delete-project:hover{background:#d8cabe;border-color:#713a2c}
+.project-delete-modal{max-width:470px}
+.project-delete-modal .delete-confirm{background:#8a3b2e;border-color:#8a3b2e;color:#fff}
