@@ -6,6 +6,7 @@ Run from the project root:
 The connection string and passwords are typed with hidden input and are never printed.
 """
 import getpass
+import re
 import sys
 from pathlib import Path
 
@@ -36,10 +37,13 @@ def ask_password():
 
 
 def main():
-    url = getpass.getpass("Dán chuỗi kết nối Neon (bắt đầu bằng postgresql://, gõ không hiện chữ): ").strip()
-    if not url.startswith(("postgresql://", "postgres://", "postgresql+psycopg://")):
-        print("Chuỗi không hợp lệ: phải bắt đầu bằng postgresql://. Có thể bạn đã dán nhầm địa chỉ web.")
+    raw = getpass.getpass("Dán chuỗi kết nối Neon (chứa postgresql://, gõ không hiện chữ): ").strip()
+    match = re.search(r"postgres(?:ql)?(?:\+psycopg)?://[^\s'\"]+", raw)
+    if not match:
+        print(f"Không thấy 'postgresql://' trong nội dung vừa dán (độ dài {len(raw)} ký tự).")
+        print("Có thể bạn đã dán nhầm địa chỉ web hoặc ô dán đang trống. Vào Neon > Kết nối > Sao chép đoạn mã rồi thử lại.")
         return 1
+    url = match.group(0)
     url = normalize_database_url(url)
     try:
         parsed = make_url(url)
