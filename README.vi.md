@@ -13,6 +13,16 @@
 
 <p align="center"><a href="README.md">English</a> · <b>Tiếng Việt</b> · <a href="docs/DEPLOY.md">Triển khai</a> · <a href="SECURITY.md">Bảo mật</a></p>
 
+<p align="center">
+  <img src="docs/images/demo.gif" alt="Video OS — mở màn, đăng nhập và không gian làm việc" width="100%">
+</p>
+
+## Xem trước
+
+| Mở màn | Đăng nhập | Không gian làm việc |
+|---|---|---|
+| ![Mở màn](docs/images/opening.png) | ![Đăng nhập](docs/images/login.png) | ![Không gian làm việc](docs/images/workspace.png) |
+
 ## Vấn đề
 
 Dự án quảng cáo nào cũng bắt đầu giống nhau: khách gửi yêu cầu rời rạc qua tin nhắn, tệp đến dưới năm định dạng, và về sau không ai nói chắc được *ai đã đồng ý điều gì*. Kết quả là quay lại, dựng lại và câu "không phải cái tôi cần".

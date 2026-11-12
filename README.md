@@ -13,6 +13,16 @@
 
 <p align="center"><b>English</b> · <a href="README.vi.md">Tiếng Việt</a> · <a href="docs/DEPLOY.md">Deploy</a> · <a href="SECURITY.md">Security</a></p>
 
+<p align="center">
+  <img src="docs/images/demo.gif" alt="Video OS — opening, sign-in and workspace" width="100%">
+</p>
+
+## Preview
+
+| Opening | Sign-in | Workspace |
+|---|---|---|
+| ![Opening](docs/images/opening.png) | ![Sign-in](docs/images/login.png) | ![Workspace](docs/images/workspace.png) |
+
 ## The problem
 
 Every video ad starts the same way: a client sends a scattered brief over chat, files arrive in five formats, and nobody can say later *who agreed to what*. Re-shoots and "that's not what I asked for" follow.
