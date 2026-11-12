@@ -106,28 +106,32 @@ export default function ClientPage() {
       setError(e instanceof Error ? e.message : "Chưa gửi được, bạn thử lại nhé.");
     } finally {setBusy(false);}
   };
-  const jump = (code: string) => window.dispatchEvent(new CustomEvent("gui-jump", {detail: code}));
+  const jump = (code: string) => {
+    const el = document.querySelector(`[data-question-code="${code}"]`);
+    el?.scrollIntoView({behavior: "smooth", block: "center"});
+  };
 
   if (phase === "loading") return <main className="gui-screen" style={themeVars}><p className="gui-quiet">Đang mở phiếu của bạn…</p></main>;
   if (phase === "invalid") return <main className="gui-screen" style={themeVars}><div className="gui-card"><span className="gui-eyebrow">{studio.toUpperCase()}</span><h1>Đường link này không dùng được nữa</h1><p>Link có thể đã hết hạn hoặc được thay bằng link mới. Bạn nhắn cho {studio} để nhận link mới nhé, mọi thứ bạn đã điền trước đó vẫn còn.</p></div></main>;
   if (phase === "welcome") return <main className="gui-screen welcome" style={themeVars}>
     <div className="gui-card hero">
       <span className="gui-eyebrow">{studio.toUpperCase()}</span>
-      <h1>Chào anh chị, cảm ơn đã quan tâm đến {studio}</h1>
-      <p>Anh chị trả lời giúp vài câu ngắn để {studio} hiểu nhu cầu, rồi đề xuất phương án và báo giá phù hợp. Chỗ nào chưa chắc cứ bấm “Chưa biết”.</p>
+      <h1>Kể cho mình nghe video bạn cần</h1>
+      <p>Mình hỏi từng chút một, bạn chỉ cần trả lời những gì bạn biết. Chỗ nào chưa chắc cứ bấm “Chưa biết”, mình sẽ tư vấn thêm.</p>
       <ul className="gui-points">
-        <li><b>Khoảng 5–7 phút</b><span>Phần lớn chỉ cần bấm chọn</span></li>
-        <li><b>Không cần tài khoản</b><span>Tự lưu từng bước, quay lại bằng link này</span></li>
+        <li><b>Khoảng 5–8 phút</b><span>Phần lớn là bấm chọn</span></li>
+        <li><b>Dừng lúc nào cũng được</b><span>Tự lưu, quay lại bằng link này</span></li>
         <li><b>Gửi ảnh, video, ghi âm</b><span>Ngay trong từng câu hỏi</span></li>
       </ul>
-      <button type="button" className="gui-start" onClick={() => {sessionStorage.setItem(`gui-${token}`, "1"); setPhase("form");}}>Vâng, tôi muốn làm video →</button>
+      <button type="button" className="gui-start" onClick={() => {sessionStorage.setItem(`gui-${token}`, "1"); setPhase("form");}}>Bắt đầu</button>
+      <small>Dự án: {project?.name}</small>
     </div>
   </main>;
   if (phase === "thanks") return <main className="gui-screen" style={themeVars}>
     <div className="gui-card">
       <span className="gui-eyebrow">{studio.toUpperCase()}</span>
-      <h1>Cảm ơn anh chị, {studio} đã nhận được thông tin</h1>
-      <p>Studio đã nhận {project?.answers.length || 0} câu trả lời và {files.length} tệp. Bên em sẽ liên hệ lại sớm qua kênh anh chị đã ghi để báo giá và hỗ trợ, nếu cần hỏi thêm sẽ hỏi đúng chỗ còn thiếu.</p>
+      <h1>Cảm ơn bạn, {studio} đã nhận được rồi</h1>
+      <p>Mình đã nhận {project?.answers.length || 0} câu trả lời và {files.length} tệp của bạn. Mình sẽ đọc kỹ rồi liên hệ lại qua kênh bạn đã ghi, nếu cần hỏi thêm thì mình hỏi đúng chỗ còn thiếu.</p>
       <button type="button" className="gui-ghost" onClick={() => setPhase("form")}>Bổ sung thêm thông tin hoặc tệp</button>
     </div>
   </main>;
