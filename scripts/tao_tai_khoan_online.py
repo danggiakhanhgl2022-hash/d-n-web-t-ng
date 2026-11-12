@@ -70,10 +70,19 @@ def main():
         print(f"Máy chủ cơ sở dữ liệu: {parsed.host}  |  database: {parsed.database}")
         print("(So sánh tên máy chủ này với DATABASE_URL trên Render: phải giống nhau.)")
         engine = make_engine(url)
-        with make_session_factory(engine)() as db:
-            names = [u.username for u in db.scalars(select(User).order_by(User.username))]
+        from app.db import Base  # noqa: E402
+        from sqlalchemy.exc import ProgrammingError  # noqa: E402
+        try:
+            with make_session_factory(engine)() as db:
+                names = [u.username for u in db.scalars(select(User).order_by(User.username))]
+        except ProgrammingError:
+            print("Chưa có bảng dữ liệu trong Neon, đang tạo bảng...")
+            Base.metadata.create_all(engine)
+            with make_session_factory(engine)() as db:
+                names = [u.username for u in db.scalars(select(User).order_by(User.username))]
     except Exception as exc:  # noqa: BLE001
-        print(f"Không kết nối được cơ sở dữ liệu: {type(exc).__name__}. Kiểm tra lại chuỗi kết nối.")
+        first = (str(getattr(exc, "orig", exc)).splitlines() or [""])[0][:160]
+        print(f"Không kết nối được cơ sở dữ liệu: {type(exc).__name__}: {first}")
         return 1
     print("Tài khoản hiện có:", ", ".join(names) if names else "(chưa có)")
     username = input("Tên đăng nhập muốn tạo hoặc đặt lại mật khẩu [quanly]: ").strip() or "quanly"
