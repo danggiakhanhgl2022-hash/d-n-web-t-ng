@@ -37,7 +37,8 @@ const config: NextConfig = {
   experimental: {proxyClientMaxBodySize: "250mb", proxyTimeout: 600000},
   // The launcher builds into a fresh directory before switching the server.
   // Direct npm commands keep the legacy default unless explicitly configured.
-  distDir: process.env.VIDEO_OS_NEXT_DIST_DIR || ".next-v6",
+  // Hosting platforms (Vercel) expect the default ".next"; the local launcher keeps its own directory.
+  distDir: process.env.VIDEO_OS_NEXT_DIST_DIR || (process.env.VERCEL || process.env.RENDER ? ".next" : ".next-v6"),
   typescript: { tsconfigPath: process.env.VIDEO_OS_NEXT_TSCONFIG || "tsconfig.json" },
   async headers() { return [{source: "/:path*", headers: securityHeaders}]; },
   async rewrites() { return [{source: "/api/v1/:path*", destination: `${backendUrl}/api/v1/:path*`}]; },
