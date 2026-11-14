@@ -1,52 +1,25 @@
-# Render Blueprint: PostgreSQL + FastAPI backend + Next.js frontend, all same-origin through the Next /api proxy.
-# Deploy: Render dashboard -> New -> Blueprint -> pick this repo. Disks need a paid plan.
-databases:
-  - name: video-os-db
-    plan: basic-256mb
-    databaseName: video_os
-    user: video_os
-
+# Render: New -> Blueprint -> chọn repo này. Một dịch vụ duy nhất phục vụ cả trang web lẫn phần lưu phiếu.
+# Sau khi tạo, vào Environment để điền ADMIN_PASSWORD và DATABASE_URL (chuỗi kết nối Neon).
 services:
   - type: web
-    name: video-os-api
+    name: b-productions-tiep-nhan
     runtime: python
-    plan: starter
-    rootDir: .
-    buildCommand: pip install -r requirements.lock.txt
-    startCommand: cd backend && alembic -c alembic.ini upgrade head && uvicorn app.main:app --host 0.0.0.0 --port $PORT --proxy-headers
-    healthCheckPath: /api/v1/health
-    disk:
-      name: video-os-storage
-      mountPath: /var/data
-      sizeGB: 10
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn may_chu:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/suc-khoe
     envVars:
       - key: PYTHON_VERSION
         value: 3.12.7
-      - key: APP_ENV
-        value: production
       - key: COOKIE_SECURE
         value: "true"
       - key: TRUST_PROXY
         value: "true"
-      - key: STORAGE_DIR
-        value: /var/data/storage
+      - key: SECRET_KEY
+        generateValue: true
+      - key: ADMIN_PASSWORD
+        sync: false
       - key: DATABASE_URL
-        fromDatabase:
-          name: video-os-db
-          property: connectionString
-
-  - type: web
-    name: video-os-web
-    runtime: node
-    plan: starter
-    rootDir: frontend
-    buildCommand: npm ci && npm run build
-    startCommand: npm run start:prod
-    envVars:
-      - key: NODE_VERSION
-        value: 22
-      - key: BACKEND_URL
-        fromService:
-          type: web
-          name: video-os-api
-          property: hostport
+        sync: false
+      - key: STUDIO_CONTACT
+        value: "0941761768"
